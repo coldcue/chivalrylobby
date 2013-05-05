@@ -38,7 +38,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public class GuestbookServletTest {
 
-  private GuestbookServlet chivalrylobby-webServlet;
+  private GuestbookServlet chivalrylobbywebServlet;
 
   private final LocalServiceTestHelper helper =
       new LocalServiceTestHelper(new LocalUserServiceTestConfig())
@@ -49,7 +49,7 @@ public class GuestbookServletTest {
   @Before
   public void setupGuestBookServlet() {
     helper.setUp();
-    chivalrylobby-webServlet = new GuestbookServlet();
+    chivalrylobbywebServlet = new GuestbookServlet();
   }
 
   @After
@@ -66,7 +66,7 @@ public class GuestbookServletTest {
 
     when(response.getWriter()).thenReturn(new PrintWriter(stringWriter));
 
-    chivalrylobby-webServlet.doGet(request, response);
+    chivalrylobbywebServlet.doGet(request, response);
 
     User currentUser = UserServiceFactory.getUserService().getCurrentUser();
 
