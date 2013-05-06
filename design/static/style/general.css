@@ -20,6 +20,9 @@ a {
 	color: #F90;
 	text-decoration: underline;
 }
+a img {
+	border: none;
+}
 a:hover {
 	color: #FFF;
 }
@@ -98,18 +101,18 @@ div.content-box.headspace {
 	padding: 2px;
 	margin-bottom: 2px;
 }
-
+#ID-servers li a {
+	text-decoration: none;
+}
 #ID-servers li:hover {
 	background: rgba(255,255,255,0.5);
 	padding: 2px;
 	margin-bottom: 2px;
 }
-
 #ID-servers td.map {
 	width: 56px;
 }
 #ID-servers td.map img {
-	border: none;
 	padding: 3px 3px 0 3px;
 }
 #ID-servers td.info {
@@ -142,7 +145,7 @@ div.content-box.headspace {
 	color: #000;
 	font-weight: bold;
 	width: 100px;
-	text-align:center;
+	text-align: center;
 }
 #ID-servers td.join:hover {
 	color: #F60;
