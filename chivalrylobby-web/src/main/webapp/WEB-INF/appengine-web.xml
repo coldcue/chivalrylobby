@@ -10,7 +10,14 @@
 
 	<!-- Static files -->
 	<static-files>
-		<include path="/**.ico" />
-		<include path="/static/**.*" />
+		<include path="/*.ico" />
+		<include path="/static/**" />
 	</static-files>
+
+	<!-- Page speed optimization -->
+	<pagespeed>
+		<enabled-rewriter>CollapseWhitespace</enabled-rewriter>
+		<enabled-rewriter>RemoveComments</enabled-rewriter>
+		<enabled-rewriter>MinifyCss</enabled-rewriter>
+	</pagespeed>
 </appengine-web-app>
