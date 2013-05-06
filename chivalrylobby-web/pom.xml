@@ -128,7 +128,11 @@
 				<artifactId>appengine-maven-plugin</artifactId>
 				<version>${appengine.target.version}</version>
 				<configuration>
-
+					<jvmFlags>
+						<jvmFlag>-Xdebug</jvmFlag>
+						<jvmFlag>-Xrunjdwp:transport=dt_socket,address=1044,server=y,suspend=y
+						</jvmFlag>
+					</jvmFlags>
 				</configuration>
 			</plugin>
 		</plugins>
