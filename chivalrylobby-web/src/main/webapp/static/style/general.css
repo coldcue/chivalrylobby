@@ -1,10 +1,102 @@
 @charset "utf-8";
 body {
-	font-family: "Times New Roman", Times, serif;
 	font-size: 12px;
+	color: #FFF;
+	background: fixed top center no-repeat rgb(34, 34, 34) url(../images/bg1.jpg);
+	font-family: Verdana, Geneva, sans-serif;
+}
+
+h1 {
+	margin: 0;
+	padding: 0;
 	color: #CCC;
-	background-color: #000;
-	background-image: url(../images/bg_large.jpg);
-	background-repeat:no-repeat;
-	background-position: top center;
+	font-size: 16px;
+	text-shadow: 1px 1px 0px #555;
+}
+
+p {
+	margin: 10px;
+	text-align:justify;
+}
+
+a {
+	color: #F90;
+	text-decoration: underline;
+}
+a:hover {
+	color: #FFF;
+}
+
+div.content-box {
+	background-color: rgba(0,0,0,0.9);
+	margin: 10px 0 0 0;
+	padding: 10px;
+}
+
+div.content-box.headspace {
+	margin-top: 20px;
+}
+
+/* LOGO */
+
+#ID-logo {
+	padding: 10px;
+	background-color: rgba(0,0,0,0.8);
+	float: left;
+}
+#ID-logo h1 {
+	margin: 0px;
+	padding: 0px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	color: #CCC;
+	font-size: 48px;
+	text-shadow: 2px 2px 0px #555;
+	cursor: default;
+}
+#ID-logo h1 .info {
+	color:#555;
+	text-shadow:none;
+}
+/* MENU */
+#ID-menu {
+	margin-top: 20px;
+	padding: 10px 4px;
+	background-color: rgba(0,0,0,0.8);
+}
+#ID-menu ul {
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	height: 16px;
+}
+#ID-menu ul li {
+	float: left;
+	margin: 0 20px 0 0;
+}
+#ID-menu ul li a {
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	color: #CCC;
+	text-decoration: none;
+	font-size: 14px;
+	text-shadow: 1px 1px 0px #555;
+	padding: 6px;
+}
+#ID-menu ul li a:hover {
+	color: #FFF;
+	background-color: rgba(102,102,102,0.9);
+}
+/* ADS */
+#ID-ad1 {
+	background-color: rgba(0,0,0,0.5);
+	margin: 10px auto 0 auto;
+	width: 728px;
+	height: 90px;
+}
+#ID-ad2 {
+	background-color: rgba(0,0,0,0.5);
+	width: 300px;
+	height: 600px;
+	margin: 10px 0 0 0;
 }
