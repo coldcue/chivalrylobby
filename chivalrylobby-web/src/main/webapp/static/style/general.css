@@ -1,0 +1,10 @@
+@charset "utf-8";
+body {
+	font-family: "Times New Roman", Times, serif;
+	font-size: 12px;
+	color: #CCC;
+	background-color: #000;
+	background-image: url(../images/bg_large.jpg);
+	background-repeat:no-repeat;
+	background-position: top center;
+}
