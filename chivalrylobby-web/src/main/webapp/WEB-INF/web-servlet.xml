@@ -15,9 +15,8 @@
 
 
 	<!-- Components -->
-	<context:component-scan base-package="com.galaxyhosting.web.controller" />
 	<mvc:annotation-driven />
-
+	<context:component-scan base-package="com.chivalrylobby.web.controller"></context:component-scan>
 
 	<!-- Handles HTTP GET requests for /static/** by efficiently serving up 
 		static resources in the ${webappRoot}/static/ directory -->
