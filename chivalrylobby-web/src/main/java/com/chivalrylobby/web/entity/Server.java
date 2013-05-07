@@ -2,7 +2,6 @@ package com.chivalrylobby.web.entity;
 
 import java.util.Date;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -22,12 +21,10 @@ public class Server {
 
 	private boolean online;
 
-	@Column(length = 16)
 	private String ip;
 
 	private int port;
 
-	@Column(length = 2)
 	private String country = "";
 
 	private int slot;
