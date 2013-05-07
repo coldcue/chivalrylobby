@@ -1,6 +1,7 @@
 package com.chivalrylobby.web.service;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -35,8 +36,18 @@ public class ServersService {
 		em.close();
 		return em.find(Server.class, id);
 	}
-	
-	
+
+	@Transactional
+	public List<Server> getPublicServers() {
+		EntityManager em = emf.createEntityManager();
+
+		@SuppressWarnings("unchecked")
+		List<Server> servers = em.createNamedQuery("getPublicServers")
+				.getResultList();
+
+		em.close();
+		return servers;
+	}
 
 	@Transactional
 	public void test() {
@@ -46,7 +57,7 @@ public class ServersService {
 		tx.begin();
 
 		Server jdo = new Server();
-		jdo.setCountry("HU");
+		jdo.setCountry("de");
 		jdo.setIp("127.14.124.64");
 		jdo.setLastonline(new Date());
 		jdo.setLastupdate(new Date());
@@ -57,6 +68,7 @@ public class ServersService {
 		jdo.setTunngle(false);
 		jdo.setGamemode(ServerGamemodes.AOCTD);
 		jdo.setMap(ServerMaps.MOOR);
+		jdo.setName("[ASD] Clan's Chivalry - NO BLA/AH/BL/AH");
 		em.persist(jdo);
 
 		tx.commit();
