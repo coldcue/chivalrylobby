@@ -23,6 +23,11 @@
 		</property>
 	</bean>
 
+	<!-- Entity Management -->
+	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
+		<property name="persistenceUnitName" value="datastore"/>
+	</bean>
+	
 	<!-- The message source -->
 	<!-- <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource"> 
 		<property name="basename" value="classpath:langs/messages" /> <property name="defaultEncoding" 
