@@ -3,11 +3,11 @@ package com.chivalrylobby.web.controller;
 import java.util.Date;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
@@ -21,11 +21,11 @@ public class IndexController {
 	WebApplicationContext wac;
 
 	@RequestMapping("/index")
+	@Transactional
 	public ModelAndView index() {
 		ModelAndView mav = new ModelAndView("index/index");
 
-		EntityManagerFactory emf = (EntityManagerFactory) wac.getBean("entityManagerFactory");
-		EntityManager em = emf.createEntityManager();
+		EntityManager em = (EntityManager) wac.getBean("entityManager");
 		
 		EntityTransaction etx = em.getTransaction();
 		etx.begin();

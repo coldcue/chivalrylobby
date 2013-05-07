@@ -24,10 +24,19 @@
 	</bean>
 
 	<!-- Entity Management -->
-	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
-		<property name="persistenceUnitName" value="datastore"/>
+	<bean scope="prototype" id="entityManager" class="javax.persistence.EntityManager"
+		factory-bean="entityManagerFactory" factory-method="createEntityManager"
+		destroy-method="close" />
+
+	<bean id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
+		<property name="persistenceUnitName" value="datastore" />
 	</bean>
-	
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<constructor-arg ref="entityManagerFactory" />
+	</bean>
+
+	<tx:annotation-driven />
 	<!-- The message source -->
 	<!-- <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource"> 
 		<property name="basename" value="classpath:langs/messages" /> <property name="defaultEncoding" 
