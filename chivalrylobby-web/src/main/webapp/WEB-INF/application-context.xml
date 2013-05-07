@@ -37,6 +37,7 @@
 	</bean>
 
 	<tx:annotation-driven />
+	<cache:annotation-driven />
 	<!-- The message source -->
 	<!-- <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource"> 
 		<property name="basename" value="classpath:langs/messages" /> <property name="defaultEncoding" 
