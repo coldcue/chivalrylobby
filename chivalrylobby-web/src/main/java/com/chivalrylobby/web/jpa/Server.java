@@ -11,7 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class ServerJDO {
+public class Server {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Key key;
@@ -36,7 +36,7 @@ public class ServerJDO {
 
 	private Date lastonline;
 
-	public ServerJDO() {
+	public Server() {
 	}
 	
 	

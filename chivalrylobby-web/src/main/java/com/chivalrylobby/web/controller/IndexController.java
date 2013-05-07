@@ -10,7 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.chivalrylobby.web.jpa.ServerJDO;
+import com.chivalrylobby.web.jpa.Server;
 
 @Controller
 public class IndexController {
@@ -21,8 +21,9 @@ public class IndexController {
 		
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("datastore");
 		EntityManager em = emf.createEntityManager();
+
 		
-		ServerJDO jdo = new ServerJDO();
+		Server jdo = new Server();
 		jdo.setCountry("HU");
 		jdo.setIp("127.14.124.64");
 		jdo.setLastonline(new Date());
@@ -34,6 +35,7 @@ public class IndexController {
 		jdo.setTunngle(false);
 		
 		em.persist(jdo);
+
 		
 		return mav;
 	}
