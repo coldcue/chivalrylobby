@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.chivalrylobby.web.jpa.Server;
+import com.chivalrylobby.web.entity.Server;
+import com.chivalrylobby.web.entity.enums.ServerGamemodes;
+import com.chivalrylobby.web.entity.enums.ServerMaps;
 
 @Controller
 public class IndexController {
@@ -35,10 +37,12 @@ public class IndexController {
 		jdo.setLastonline(new Date());
 		jdo.setLastupdate(new Date());
 		jdo.setOnline(true);
-		jdo.setPlayers((byte) 32);
+		jdo.setPlayers(32);
 		jdo.setPort(6547);
-		jdo.setSlot((byte) 45);
+		jdo.setSlot(45);
 		jdo.setTunngle(false);
+		jdo.setGamemode(ServerGamemodes.AOCTD);
+		jdo.setMap(ServerMaps.MOOR);
 
 		em.persist(jdo);
 
