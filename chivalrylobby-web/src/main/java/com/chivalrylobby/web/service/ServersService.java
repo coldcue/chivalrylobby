@@ -16,11 +16,9 @@ import com.chivalrylobby.web.entity.enums.ServerMaps;
 import com.google.appengine.api.datastore.Key;
 
 public class ServersService implements ApplicationContextAware {
-
 	ApplicationContext context;
 
 	public ServersService() {
-		System.out.println("!!!!!!!!!!!!!!!!!!! constructor called");
 	}
 
 	/**
