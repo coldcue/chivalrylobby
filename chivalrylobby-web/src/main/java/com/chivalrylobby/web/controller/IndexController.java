@@ -4,7 +4,9 @@ import java.util.Date;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import javax.transaction.Transaction;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +23,9 @@ public class IndexController {
 		
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("datastore");
 		EntityManager em = emf.createEntityManager();
-
+		EntityTransaction etx = em.getTransaction();
+		
+		etx.begin();
 		
 		Server jdo = new Server();
 		jdo.setCountry("HU");
@@ -35,6 +39,8 @@ public class IndexController {
 		jdo.setTunngle(false);
 		
 		em.persist(jdo);
+		
+		etx.commit();
 
 		
 		return mav;
