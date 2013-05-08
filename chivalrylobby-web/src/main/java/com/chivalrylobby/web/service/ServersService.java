@@ -39,10 +39,11 @@ public class ServersService {
 	}
 
 	@Transactional
-	public List<Server> getPublicServers() {
+	public List<Server> getOnlineServers() {
 		EntityManager em = emf.createEntityManager();
 
-		Query query = em.createQuery("select s from Server s");
+		Query query = em
+				.createQuery("SELECT s FROM Server s WHERE s.online = true");
 
 		@SuppressWarnings("unchecked")
 		List<Server> servers = query.getResultList();

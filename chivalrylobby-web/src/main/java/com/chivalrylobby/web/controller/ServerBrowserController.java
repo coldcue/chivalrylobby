@@ -20,9 +20,14 @@ public class ServerBrowserController {
 	public ModelAndView index() {
 		ModelAndView mav = new ModelAndView("serverbrowser/serverbrowser");
 
-		List<Server> servers = serversService.getPublicServers();
+		List<Server> servers = serversService.getOnlineServers();
 		mav.addObject(servers);
 
 		return mav;
+	}
+
+	@RequestMapping("/test")
+	public void test() {
+		serversService.test();
 	}
 }
