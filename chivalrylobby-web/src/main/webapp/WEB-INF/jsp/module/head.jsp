@@ -6,7 +6,7 @@
 <head>
 
 <meta charset="utf-8">
-<title>CHIVALRY LOBBY</title>
+<title>Chivalry Lobby</title>
 <meta name="description"
 	content="Online server list and How-tos for Chivalry: Medieval Warfare!">
 

@@ -126,14 +126,19 @@
 			<version>3.2.2.RELEASE</version>
 		</dependency>
 		<dependency>
-			<groupId>net.sf.jsr107cache</groupId>
-			<artifactId>jsr107cache</artifactId>
-			<version>1.1</version>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context-support</artifactId>
 			<version>3.2.2.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.appengine</groupId>
+			<artifactId>appengine-jsr107cache</artifactId>
+			<version>${appengine.target.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.jsr107cache</groupId>
+			<artifactId>jsr107cache</artifactId>
+			<version>1.1</version>
 		</dependency>
 	</dependencies>
 
