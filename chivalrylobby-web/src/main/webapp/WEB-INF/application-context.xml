@@ -12,17 +12,24 @@
            http://www.springframework.org/schema/tx
            http://www.springframework.org/schema/tx/spring-tx.xsd">
 
-	<!-- Enable cacheing -->
-	<bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">
-		<property name="caches">
-			<set>
-				<bean
-					class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean">
-					<property name="name" value="default" />
-				</bean>
-			</set>
-		</property>
+
+	<!-- Services -->
+	<bean id="serversService" class="com.chivalrylobby.web.service.ServersService">
+		<property name="emf" ref="entityManagerFactory"></property>
 	</bean>
+
+	<!-- Enable cacheing -->
+	<!-- <bean id="cacheManager" -->
+	<!-- class="org.springframework.cache.jcache.JCacheCacheManager"> -->
+	<!-- <property name="cacheManager"> -->
+	<!-- <set> -->
+	<!-- <bean -->
+	<!-- class="net.sf.jsr107cache.CacheManager"> -->
+	<!-- <property name="cacheManager" value="memcache" /> -->
+	<!-- </bean> -->
+	<!-- </set> -->
+	<!-- </property> -->
+	<!-- </bean> -->
 
 	<!-- Entity Management -->
 	<bean id="entityManagerFactory"
@@ -35,9 +42,4 @@
 
 	<tx:annotation-driven />
 	<cache:annotation-driven />
-	<!-- The message source -->
-	<!-- <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource"> 
-		<property name="basename" value="classpath:langs/messages" /> <property name="defaultEncoding" 
-		value="UTF-8" /> </bean> -->
-
 </beans>	
