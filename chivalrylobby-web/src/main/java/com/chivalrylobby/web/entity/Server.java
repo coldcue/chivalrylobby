@@ -8,15 +8,12 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.LockModeType;
-import javax.persistence.NamedQuery;
 
 import com.chivalrylobby.web.entity.enums.ServerGamemodes;
 import com.chivalrylobby.web.entity.enums.ServerMaps;
 import com.google.appengine.api.datastore.Key;
 
 @Entity
-@NamedQuery(name = "getPublicServers", query = "SELECT s FROM Server s", lockMode = LockModeType.READ)
 public class Server {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,13 +27,13 @@ public class Server {
 
 	private int port;
 
-	private String country = "";
+	private String country;
 
 	private int slot;
 
 	private int players;
 
-	private boolean tunngle = false;
+	private boolean tunngle;
 
 	private Date lastupdate;
 

@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
+import javax.persistence.Query;
 
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,9 +42,10 @@ public class ServersService {
 	public List<Server> getPublicServers() {
 		EntityManager em = emf.createEntityManager();
 
+		Query query = em.createQuery("select s from Server s");
+
 		@SuppressWarnings("unchecked")
-		List<Server> servers = em.createNamedQuery("getPublicServers")
-				.getResultList();
+		List<Server> servers = query.getResultList();
 
 		em.close();
 		return servers;
