@@ -20,8 +20,6 @@ public class ServerBrowserController {
 	public ModelAndView index() {
 		ModelAndView mav = new ModelAndView("serverbrowser/serverbrowser");
 
-		serversService.test();
-
 		List<Server> servers = serversService.getPublicServers();
 		mav.addObject(servers);
 

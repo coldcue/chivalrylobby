@@ -2,12 +2,13 @@ package com.chivalrylobby.web.entity;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import com.chivalrylobby.web.entity.enums.ServerGamemodes;
 import com.chivalrylobby.web.entity.enums.ServerMaps;
@@ -19,14 +20,17 @@ public class Server {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Key key;
 
+	@Column(length = 64)
 	private String name;
 
 	private boolean online;
 
+	@Column(length = 16)
 	private String ip;
 
 	private int port;
 
+	@Column(length = 4)
 	private String country;
 
 	private int slot;
@@ -35,14 +39,14 @@ public class Server {
 
 	private boolean tunngle;
 
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date lastupdate;
 
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date lastonline;
 
-	@Enumerated(EnumType.ORDINAL)
 	private ServerMaps map;
 
-	@Enumerated(EnumType.ORDINAL)
 	private ServerGamemodes gamemode;
 
 	public Server() {
