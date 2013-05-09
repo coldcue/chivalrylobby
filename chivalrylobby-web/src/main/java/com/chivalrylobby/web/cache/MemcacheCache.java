@@ -3,6 +3,7 @@ package com.chivalrylobby.web.cache;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.cache.Cache;
 import org.springframework.cache.support.SimpleValueWrapper;
 
@@ -11,17 +12,12 @@ import com.google.appengine.api.memcache.ErrorHandlers;
 import com.google.appengine.api.memcache.Expiration;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
 
-public class MemcacheCache implements Cache {
+public class MemcacheCache implements Cache, InitializingBean {
 
-	private AsyncMemcacheService ams;
+	protected AsyncMemcacheService ams;
+	private String name;
+	private int timeout;
 	private Expiration exp;
-
-	public MemcacheCache() {
-		ams = MemcacheServiceFactory.getAsyncMemcacheService("default");
-		ams.setErrorHandler(ErrorHandlers
-				.getConsistentLogAndContinue(Level.INFO));
-		exp = Expiration.byDeltaSeconds(3600);
-	}
 
 	@Override
 	public String getName() {
@@ -57,6 +53,26 @@ public class MemcacheCache implements Cache {
 	@Override
 	public void clear() {
 		ams.clearAll();
+	}
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		ams = MemcacheServiceFactory.getAsyncMemcacheService(name);
+		ams.setErrorHandler(ErrorHandlers
+				.getConsistentLogAndContinue(Level.INFO));
+		exp = Expiration.byDeltaSeconds(timeout);
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setTimeout(int timeout) {
+		this.timeout = timeout;
+	}
+
+	public int getTimeout() {
+		return timeout;
 	}
 
 }

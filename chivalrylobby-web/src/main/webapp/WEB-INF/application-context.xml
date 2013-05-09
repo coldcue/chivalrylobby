@@ -22,7 +22,10 @@
 	<bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">
 		<property name="caches">
 			<set>
-				<bean class="com.chivalrylobby.web.cache.MemcacheCache" />
+				<bean class="com.chivalrylobby.web.cache.MemcacheCache">
+					<property name="name" value="default" />
+					<property name="timeout" value="3600" />
+				</bean>
 			</set>
 		</property>
 	</bean>
