@@ -17,7 +17,6 @@ public class MemcacheCache implements Cache, InitializingBean {
 	protected AsyncMemcacheService ams;
 	private String name;
 	private int timeout;
-	private Expiration exp;
 
 	@Override
 	public String getName() {
@@ -44,7 +43,7 @@ public class MemcacheCache implements Cache, InitializingBean {
 	@Override
 	public void put(Object key, Object value) {
 		try {
-			ams.put(key, value, exp);
+			ams.put(key, value, Expiration.byDeltaSeconds(timeout));
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 		}
@@ -65,7 +64,6 @@ public class MemcacheCache implements Cache, InitializingBean {
 		ams = MemcacheServiceFactory.getAsyncMemcacheService(name);
 		ams.setErrorHandler(ErrorHandlers
 				.getConsistentLogAndContinue(Level.INFO));
-		exp = Expiration.byDeltaSeconds(timeout);
 	}
 
 	public void setName(String name) {

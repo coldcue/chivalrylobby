@@ -41,8 +41,8 @@ public class ServersService {
 	}
 
 	@SuppressWarnings("unchecked")
+	@Cacheable(value = "short", key = "#root.methodName")
 	@Transactional
-	@Cacheable(value = "short", key = "onlineServers")
 	public List<Server> getOnlineServers() {
 		EntityManager em = emf.createEntityManager();
 		List<Server> servers = new ArrayList<>();
@@ -53,8 +53,8 @@ public class ServersService {
 		for (Server temp : (List<Server>) query.getResultList()) {
 			servers.add(temp);
 		}
-		em.close();
 
+		em.close();
 		return servers;
 	}
 
