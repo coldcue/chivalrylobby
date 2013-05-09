@@ -41,7 +41,8 @@ public class ServersService {
 	}
 
 	@SuppressWarnings("unchecked")
-	@Cacheable("default")
+	@Transactional
+	@Cacheable(value = "short", key = "onlineServers")
 	public List<Server> getOnlineServers() {
 		EntityManager em = emf.createEntityManager();
 		List<Server> servers = new ArrayList<>();

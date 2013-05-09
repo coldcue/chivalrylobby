@@ -26,6 +26,10 @@
 					<property name="name" value="default" />
 					<property name="timeout" value="3600" />
 				</bean>
+				<bean class="com.chivalrylobby.web.cache.MemcacheCache">
+					<property name="name" value="short" />
+					<property name="timeout" value="60" />
+				</bean>
 			</set>
 		</property>
 	</bean>
