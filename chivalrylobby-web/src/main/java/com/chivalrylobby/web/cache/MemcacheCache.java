@@ -32,17 +32,22 @@ public class MemcacheCache implements Cache, InitializingBean {
 	@Override
 	public ValueWrapper get(Object key) {
 		try {
-			return new SimpleValueWrapper(ams.get(key).get());
+			if (ams.contains(key).get()) {
+				return new SimpleValueWrapper(ams.get(key).get());
+			}
 		} catch (InterruptedException | ExecutionException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return new SimpleValueWrapper(null);
+		return null;
 	}
 
 	@Override
 	public void put(Object key, Object value) {
-		ams.put(key, value, exp);
+		try {
+			ams.put(key, value, exp);
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

@@ -126,9 +126,9 @@
 			<version>3.2.2.RELEASE</version>
 		</dependency>
 		<dependency>
-			<groupId>com.google.appengine</groupId>
-			<artifactId>appengine-jsr107cache</artifactId>
-			<version>${appengine.target.version}</version>
+			<groupId>org.datanucleus</groupId>
+			<artifactId>datanucleus-cache</artifactId>
+			<version>3.1.1</version>
 		</dependency>
 	</dependencies>
 

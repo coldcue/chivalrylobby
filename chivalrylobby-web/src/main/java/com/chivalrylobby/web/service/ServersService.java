@@ -1,5 +1,6 @@
 package com.chivalrylobby.web.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -8,6 +9,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.chivalrylobby.web.entity.Server;
@@ -38,21 +40,23 @@ public class ServersService {
 		return em.find(Server.class, id);
 	}
 
-	@Transactional
+	@SuppressWarnings("unchecked")
+	@Cacheable("default")
 	public List<Server> getOnlineServers() {
 		EntityManager em = emf.createEntityManager();
+		List<Server> servers = new ArrayList<>();
 
 		Query query = em
 				.createQuery("SELECT s FROM Server s WHERE s.online = true");
 
-		@SuppressWarnings("unchecked")
-		List<Server> servers = query.getResultList();
-
+		for (Server temp : (List<Server>) query.getResultList()) {
+			servers.add(temp);
+		}
 		em.close();
+
 		return servers;
 	}
 
-	@Transactional
 	public void test() {
 		EntityManager em = emf.createEntityManager();
 

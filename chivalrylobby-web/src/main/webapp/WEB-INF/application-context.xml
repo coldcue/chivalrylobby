@@ -40,4 +40,5 @@
 	</bean>
 
 	<tx:annotation-driven />
+	<cache:annotation-driven />
 </beans>	

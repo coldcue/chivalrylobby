@@ -1,5 +1,6 @@
 package com.chivalrylobby.web.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -15,7 +16,9 @@ import com.chivalrylobby.web.entity.enums.ServerMaps;
 import com.google.appengine.api.datastore.Key;
 
 @Entity
-public class Server {
+public class Server implements Serializable {
+	private static final long serialVersionUID = 4007569952052596829L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Key key;
