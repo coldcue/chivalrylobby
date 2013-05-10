@@ -3,6 +3,7 @@ package com.chivalrylobby.web.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -17,6 +18,7 @@ public class ServerBrowserController {
 	ServersService serversService;
 
 	@RequestMapping("/")
+	@Cacheable("short")
 	public ModelAndView index() {
 		ModelAndView mav = new ModelAndView("serverbrowser/serverbrowser");
 
@@ -24,10 +26,5 @@ public class ServerBrowserController {
 		mav.addObject(servers);
 
 		return mav;
-	}
-
-	@RequestMapping("/test")
-	public void test() {
-		serversService.test();
 	}
 }

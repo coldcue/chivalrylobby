@@ -1,69 +1,34 @@
 package com.chivalrylobby.web.service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.chivalrylobby.web.entity.Server;
-import com.chivalrylobby.web.entity.enums.ServerGamemodes;
-import com.chivalrylobby.web.entity.enums.ServerMaps;
-import com.chivalrylobby.web.json.support.RegisterServer;
 import com.google.appengine.api.datastore.Key;
 
 public class ServersService {
-	EntityManagerFactory emf;
+	private final String cacheName = "servers";
 
-	public void setEmf(EntityManagerFactory emf) {
-		this.emf = emf;
+	private EntityManagerFactory entityManagerFactory;
+	private CacheManager cacheManager;
+
+	public void setCacheManager(CacheManager cacheManager) {
+		this.cacheManager = cacheManager;
 	}
 
-	@Transactional
-	public Server registerServer(RegisterServer registerServer)
-			throws Exception {
-
-		// Checks that is there a server like this
-		Server server = null;
-		try {
-			server = getServer(registerServer.getIp(), registerServer.getPort());
-		} catch (Exception e) {
-			// Do nothing
-		}
-
-		if (server != null)
-			throw new Exception("Server is already registered!");
-
-		// New server
-		Server newServer = registerServer.createServer();
-
-		// TODO get country
-		newServer.setCountry("de");
-		newServer.setGamemode(ServerGamemodes.ND);
-		newServer.setMap(ServerMaps.ND);
-		newServer.setLastonline(new Date());
-		newServer.setLastupdate(new Date());
-		newServer.setOnline(true);
-
-		EntityManager em = emf.createEntityManager();
-		EntityTransaction tx = em.getTransaction();
-		try {
-			tx.begin();
-			em.persist(newServer);
-			tx.commit();
-			em.close();
-			return newServer;
-		} catch (Exception e) {
-			tx.rollback();
-			em.close();
-			throw e;
-		}
+	public void setEntityManagerFactory(
+			EntityManagerFactory entityManagerFactory) {
+		this.entityManagerFactory = entityManagerFactory;
 	}
 
 	/**
@@ -71,38 +36,77 @@ public class ServersService {
 	 * 
 	 * @param id
 	 * @return
+	 * @throws Exception
 	 */
 	@Transactional
-	public Server getServer(Key id) {
-		EntityManager em = emf.createEntityManager();
-		Server ret = em.find(Server.class, id);
-		em.close();
-		return ret;
+	@CachePut(value = cacheName, key = "#id.id")
+	public Server getServer(Key id) throws Exception {
+		EntityManager em = entityManagerFactory.createEntityManager();
+		try {
+			Server ret = em.find(Server.class, id);
+
+			// Evict online servers cache
+			cacheManager.getCache(cacheName).evict("getOnlineServers");
+			return ret;
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			em.close();
+		}
+
 	}
 
 	/**
-	 * Gets a server by IP and PORT
+	 * Gets a server from the database by IP and PORT
 	 * 
 	 * @param ip
 	 * @param port
 	 * @return
+	 * @throws Exception
 	 */
+	@Transactional
 	public Server getServer(String ip, int port) {
-		EntityManager em = emf.createEntityManager();
-		Server ret = (Server) em
-				.createQuery(
-						"SELECT s FROM Server s WHERE s.ip = :ip AND s.port = :port")
-				.setParameter("ip", ip).setParameter("port", port)
-				.getSingleResult();
-		em.close();
-		return ret;
+		EntityManager em = entityManagerFactory.createEntityManager();
+		try {
+			Server server = (Server) em
+					.createQuery(
+							"SELECT s FROM Server s WHERE s.ip = :ip AND s.port = :port")
+					.setParameter("ip", ip).setParameter("port", port)
+					.getSingleResult();
+
+			// Evict online servers cache
+			Cache cache = cacheManager.getCache(cacheName);
+			cache.put(server.getKey().getId(), server);
+			cache.evict("getOnlineServers");
+			return server;
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			em.close();
+		}
 	}
 
+	/**
+	 * Gets server from cache and if its not there, then refreshes it.
+	 * 
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
+	@Cacheable(value = cacheName, key = "#id.id")
+	public Server getServerFromCache(Key id) throws Exception {
+		return getServer(id);
+	}
+
+	/**
+	 * Get Online servers (it has a protective cache)
+	 * 
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
-	@Cacheable(value = "short", key = "#root.methodName")
-	@Transactional
+	@Cacheable(value = cacheName, key = "#root.methodName")
 	public List<Server> getOnlineServers() {
-		EntityManager em = emf.createEntityManager();
+		EntityManager em = entityManagerFactory.createEntityManager();
 		List<Server> servers = new ArrayList<>();
 
 		Query query = em
@@ -114,30 +118,5 @@ public class ServersService {
 
 		em.close();
 		return servers;
-	}
-
-	public void test() {
-		EntityManager em = emf.createEntityManager();
-
-		EntityTransaction tx = em.getTransaction();
-		tx.begin();
-
-		Server jdo = new Server();
-		jdo.setCountry("de");
-		jdo.setIp("127.14.124.64");
-		jdo.setLastonline(new Date());
-		jdo.setLastupdate(new Date());
-		jdo.setOnline(true);
-		jdo.setPlayers(32);
-		jdo.setPort(6547);
-		jdo.setSlot(45);
-		jdo.setTunngle(false);
-		jdo.setGamemode(ServerGamemodes.AOCTD);
-		jdo.setMap(ServerMaps.MOOR);
-		jdo.setName("[ASD] Clan's Chivalry - NO BLA/AH/BL/AH");
-		em.persist(jdo);
-
-		tx.commit();
-		em.close();
 	}
 }

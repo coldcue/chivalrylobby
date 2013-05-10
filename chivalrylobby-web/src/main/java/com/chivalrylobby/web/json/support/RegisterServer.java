@@ -1,5 +1,7 @@
 package com.chivalrylobby.web.json.support;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 import com.chivalrylobby.web.entity.Server;
 
 public class RegisterServer extends SecurityImpl {
@@ -18,7 +20,8 @@ public class RegisterServer extends SecurityImpl {
 		ret.setIp(ip);
 		ret.setPort(port);
 		ret.setTunngle(tunngle);
-		ret.setName(name);
+		// Prevent hacking
+		ret.setName(StringEscapeUtils.escapeHtml(name));
 		return ret;
 	}
 
