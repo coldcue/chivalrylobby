@@ -1,8 +1,9 @@
-package com.chivalrylobby.web.json.support;
+package com.chivalrylobby.web.clapi;
 
 public class ResponseMessage {
 	private boolean success;
 	private String message;
+	private long id;
 
 	public ResponseMessage(boolean success, String message) {
 		this.success = success;
@@ -23,6 +24,14 @@ public class ResponseMessage {
 
 	public void setSuccess(boolean success) {
 		this.success = success;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
 	}
 
 }

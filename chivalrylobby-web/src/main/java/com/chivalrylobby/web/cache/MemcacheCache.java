@@ -25,7 +25,7 @@ public class MemcacheCache implements Cache, InitializingBean {
 
 	@Override
 	public Object getNativeCache() {
-		return null;
+		return ams;
 	}
 
 	@Override

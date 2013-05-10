@@ -1,14 +1,20 @@
-package com.chivalrylobby.web.json.support;
+package com.chivalrylobby.web.clapi;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
+import com.chivalrylobby.web.clapi.security.SecurityImpl;
 import com.chivalrylobby.web.entity.Server;
 
-public class RegisterServer extends SecurityImpl {
+/**
+ * @author Andrew
+ * 
+ */
+public class RegisterServerData extends SecurityImpl {
 	private String ip;
-	private int port;
-	private boolean tunngle;
 	private String name;
+	private int port;
+	private int slot;
+	private boolean tunngle;
 
 	/**
 	 * Creates a {@link Server} from this
@@ -29,31 +35,39 @@ public class RegisterServer extends SecurityImpl {
 		return ip;
 	}
 
-	public void setIp(String ip) {
-		this.ip = ip;
+	public String getName() {
+		return name;
 	}
 
 	public int getPort() {
 		return port;
 	}
 
-	public void setPort(int port) {
-		this.port = port;
+	public int getSlot() {
+		return slot;
 	}
 
 	public boolean isTunngle() {
 		return tunngle;
 	}
 
-	public void setTunngle(boolean tunngle) {
-		this.tunngle = tunngle;
-	}
-
-	public String getName() {
-		return name;
+	public void setIp(String ip) {
+		this.ip = ip;
 	}
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public void setPort(int port) {
+		this.port = port;
+	}
+
+	public void setSlot(int slot) {
+		this.slot = slot;
+	}
+
+	public void setTunngle(boolean tunngle) {
+		this.tunngle = tunngle;
 	}
 }

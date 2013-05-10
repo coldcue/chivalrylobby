@@ -1,4 +1,4 @@
-package com.chivalrylobby.web.json.support;
+package com.chivalrylobby.web.clapi.security;
 
 public abstract class SecurityImpl {
 
