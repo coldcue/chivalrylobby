@@ -12,6 +12,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
 import org.springframework.cache.Cache;
+import org.springframework.cache.Cache.ValueWrapper;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -21,7 +22,6 @@ import com.chivalrylobby.web.clapi.RefreshServerData;
 import com.chivalrylobby.web.clapi.RegisterServerData;
 import com.chivalrylobby.web.clapi.RemoveServerData;
 import com.chivalrylobby.web.entity.Server;
-import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 
 public class ServersService {
@@ -47,11 +47,12 @@ public class ServersService {
 	 * @throws Exception
 	 */
 	@Transactional
-	@CachePut(value = cacheName, key = "#id.id")
-	public Server getServer(Key id) throws Exception {
+	@CachePut(value = cacheName, key = "#id")
+	public Server getServer(long id) throws Exception {
 		EntityManager em = entityManagerFactory.createEntityManager();
 		try {
-			Server ret = em.find(Server.class, id);
+			Server ret = em.find(Server.class,
+					KeyFactory.createKey(Server.class.getSimpleName(), id));
 
 			// Evict online servers cache
 			cacheManager.getCache(cacheName).evict("getOnlineServers");
@@ -99,8 +100,8 @@ public class ServersService {
 	 * @return
 	 * @throws Exception
 	 */
-	@Cacheable(value = cacheName, key = "#id.id")
-	private Server getServerFromCache(Key id) throws Exception {
+	@Cacheable(value = cacheName, key = "#id")
+	private Server getServerFromCache(long id) throws Exception {
 		return getServer(id);
 	}
 
@@ -121,8 +122,7 @@ public class ServersService {
 					.get();
 
 			for (Long id : cachedServers) {
-				servers.add(getServerFromCache(KeyFactory.createKey(
-						Server.class.getName(), id)));
+				servers.add(getServerFromCache(id));
 			}
 
 			return servers;
@@ -156,16 +156,20 @@ public class ServersService {
 	 * 
 	 * @param server
 	 */
+	@SuppressWarnings("unchecked")
 	private void putServerInCache(Server server) {
 		Cache cache = cacheManager.getCache(cacheName);
 
-		@SuppressWarnings("unchecked")
-		Set<Long> cachedServers = (Set<Long>) cache.get("cachedServers").get();
+		Set<Long> cachedServers = null;
+		ValueWrapper object = cache.get("cachedServers");
+		if (object != null)
+			cachedServers = (Set<Long>) object.get();
 
 		cache.put(server.getKey().getId(), server);
 
 		// If its in the list, then don't upload the list again
-		if (!cachedServers.contains(server.getKey().getId())) {
+		if (cachedServers != null
+				&& !cachedServers.contains(server.getKey().getId())) {
 			cachedServers.add(server.getKey().getId());
 			cache.put("cachedServers", cachedServers);
 		}
@@ -173,16 +177,20 @@ public class ServersService {
 		cache.evict("getOnlineServers");
 	}
 
+	@SuppressWarnings("unchecked")
 	private void removeServerFromCache(Server server) {
 		Cache cache = cacheManager.getCache(cacheName);
 
-		@SuppressWarnings("unchecked")
-		Set<Long> cachedServers = (Set<Long>) cache.get("cachedServers").get();
+		Set<Long> cachedServers = null;
+		ValueWrapper object = cache.get("cachedServers");
+		if (object != null)
+			cachedServers = (Set<Long>) object.get();
 
 		cache.evict(server.getKey().getId());
 
 		// If it isn't in the list, then don't upload the list again
-		if (!cachedServers.contains(server.getKey().getId())) {
+		if (cachedServers != null
+				&& cachedServers.contains(server.getKey().getId())) {
 			cachedServers.remove(server.getKey().getId());
 			cache.put("cachedServers", cachedServers);
 		}
@@ -214,6 +222,7 @@ public class ServersService {
 	// putServerInCache(server);
 	// }
 
+	@Transactional
 	public Server register(RegisterServerData data) {
 
 		// If its already registered, then return the existing
@@ -247,11 +256,11 @@ public class ServersService {
 		return server;
 	}
 
+	@Transactional
 	public Server refresh(RefreshServerData data) throws Exception {
 
 		// Get the server
-		Server server = getServer(KeyFactory.createKey(Server.class.getName(),
-				data.getId()));
+		Server server = getServer(data.getId());
 
 		EntityManager em = entityManagerFactory.createEntityManager();
 		EntityTransaction tx = em.getTransaction();
@@ -270,6 +279,8 @@ public class ServersService {
 			server.setOnline(true);
 			server.setLastupdate(new Date());
 
+			em.persist(server);
+
 			tx.commit();
 		} catch (Exception e) {
 			tx.rollback();
@@ -282,10 +293,10 @@ public class ServersService {
 		return server;
 	}
 
+	@Transactional
 	public void remove(RemoveServerData data) throws Exception {
 		// Get the server
-		Server server = getServer(KeyFactory.createKey(Server.class.getName(),
-				data.getId()));
+		Server server = getServer(data.getId());
 
 		// Remove from cache
 		removeServerFromCache(server);

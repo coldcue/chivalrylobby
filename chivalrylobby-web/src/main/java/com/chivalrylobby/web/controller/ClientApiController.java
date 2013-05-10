@@ -36,7 +36,7 @@ public class ClientApiController {
 	@Autowired
 	ServersService serversService;
 
-	@RequestMapping(value = "/register", method = RequestMethod.POST, consumes = "application/json")
+	@RequestMapping(value = "/register", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
 	public @ResponseBody
 	ResponseMessage register(
 			@Validated({ RegisterServerDataValidator.class }) @RequestBody RegisterServerData data) {
@@ -52,9 +52,9 @@ public class ClientApiController {
 		}
 	}
 
-	@RequestMapping(value = "/refresh", method = RequestMethod.POST, consumes = "application/json")
+	@RequestMapping(value = "/refresh", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
 	public @ResponseBody
-	ResponseMessage register(
+	ResponseMessage refresh(
 			@Validated({ RefreshServerDataValidator.class }) @RequestBody RefreshServerData data) {
 		try {
 			serversService.refresh(data);
@@ -65,9 +65,9 @@ public class ClientApiController {
 		}
 	}
 
-	@RequestMapping(value = "/register", method = RequestMethod.POST, consumes = "application/json")
+	@RequestMapping(value = "/remove", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
 	public @ResponseBody
-	ResponseMessage register(
+	ResponseMessage remove(
 			@Validated(value = { SecurityValidator.class }) @RequestBody RemoveServerData data) {
 		try {
 			serversService.remove(data);
