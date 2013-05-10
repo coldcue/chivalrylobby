@@ -3,11 +3,17 @@ package com.chivalrylobby.web.clapi;
 public class ResponseMessage {
 	private boolean success;
 	private String message;
-	private long id;
+	private Long id = null;
 
 	public ResponseMessage(boolean success, String message) {
 		this.success = success;
 		this.message = message;
+	}
+
+	public ResponseMessage(boolean success, String message, long id) {
+		this.success = success;
+		this.message = message;
+		this.id = id;
 	}
 
 	public String getMessage() {
@@ -26,11 +32,11 @@ public class ResponseMessage {
 		this.success = success;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

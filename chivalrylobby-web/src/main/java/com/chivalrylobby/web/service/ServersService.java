@@ -16,6 +16,9 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.chivalrylobby.web.clapi.RefreshServerData;
+import com.chivalrylobby.web.clapi.RegisterServerData;
+import com.chivalrylobby.web.clapi.RemoveServerData;
 import com.chivalrylobby.web.entity.Server;
 import com.chivalrylobby.web.entity.enums.ServerGamemodes;
 import com.chivalrylobby.web.entity.enums.ServerMaps;
@@ -188,5 +191,20 @@ public class ServersService {
 		em.close();
 
 		addServerToCache(server);
+	}
+
+	public Server register(RegisterServerData data) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Server refresh(RefreshServerData data) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void remove(RemoveServerData data) {
+		// TODO Auto-generated method stub
+
 	}
 }
