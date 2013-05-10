@@ -8,10 +8,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.chivalrylobby.web.clapi.RefreshServerData;
+import com.chivalrylobby.web.clapi.RefreshServerDataValidator;
 import com.chivalrylobby.web.clapi.RegisterServerData;
+import com.chivalrylobby.web.clapi.RegisterServerDataValidator;
 import com.chivalrylobby.web.clapi.RemoveServerData;
 import com.chivalrylobby.web.clapi.ResponseMessage;
 import com.chivalrylobby.web.clapi.security.SecurityValidator;
@@ -33,9 +36,10 @@ public class ClientApiController {
 	@Autowired
 	ServersService serversService;
 
-	@RequestMapping("/register")
+	@RequestMapping(value = "/register", method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody
-	ResponseMessage register(@Validated @RequestBody RegisterServerData data) {
+	ResponseMessage register(
+			@Validated({ RegisterServerDataValidator.class }) @RequestBody RegisterServerData data) {
 		try {
 			Server server = serversService.register(data);
 			log.info("Server registered: id:" + server.getKey().getId());
@@ -48,9 +52,10 @@ public class ClientApiController {
 		}
 	}
 
-	@RequestMapping("/refresh")
+	@RequestMapping(value = "/refresh", method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody
-	ResponseMessage register(@Validated @RequestBody RefreshServerData data) {
+	ResponseMessage register(
+			@Validated({ RefreshServerDataValidator.class }) @RequestBody RefreshServerData data) {
 		try {
 			serversService.refresh(data);
 			return new ResponseMessage(true, "Server successfully refreshed!");
@@ -60,7 +65,7 @@ public class ClientApiController {
 		}
 	}
 
-	@RequestMapping("/register")
+	@RequestMapping(value = "/register", method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody
 	ResponseMessage register(
 			@Validated(value = { SecurityValidator.class }) @RequestBody RemoveServerData data) {
