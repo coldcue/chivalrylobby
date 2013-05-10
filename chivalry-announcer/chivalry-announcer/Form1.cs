@@ -17,6 +17,7 @@ namespace chivalry_announcer
         public bool tunngle = false;
         public int port = 7777;
         public int slot = 32;
+        public string name;
 
         public Form1()
         {
@@ -35,6 +36,7 @@ namespace chivalry_announcer
             portTextBox.Enabled = false;
             slotTextBox.Enabled = false;
             TunngleCheckBox.Enabled = false;
+            serverNameTextBox.Enabled = false;
 
             timer1_Tick(null, null);
             timer1.Start();
@@ -48,6 +50,7 @@ namespace chivalry_announcer
             portTextBox.Enabled = true;
             slotTextBox.Enabled = true;
             TunngleCheckBox.Enabled = true;
+            serverNameTextBox.Enabled = true;
 
             startstopButton.Text = "Announce!";
             startstopButton.Enabled = true;
@@ -67,7 +70,7 @@ namespace chivalry_announcer
             }
             catch (Exception e)
             {
-
+                //Do nothing
             }
         }
 
@@ -84,7 +87,7 @@ namespace chivalry_announcer
                 // Register server in the database
                 startstopButton.Enabled = false;
 
-                Program.initServer(tunngle, port, slot);
+                Program.initServer(tunngle, port, slot, name);
                 if (!Program.server.isRunning())
                 {
                     MessageBox.Show("The server isn't running! \r\n Start the server first!", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -127,6 +130,10 @@ namespace chivalry_announcer
             this.slot = slot;
 
             this.tunngle = TunngleCheckBox.Checked;
+
+            //Test server name
+            string name = serverNameTextBox.Text;
+            if (name.Length > 32) throw new Exception("The length of the server name must be lower than 32 characters!");
 
         }
 

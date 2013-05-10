@@ -19,6 +19,7 @@ namespace chivalry_announcer
         public int port;
         public int slot;
         public bool tunngle;
+        public string name;
 
         public ServerDataObject lastData;
 
@@ -29,8 +30,9 @@ namespace chivalry_announcer
         /// </summary>
         /// <param name="process">The actual server process</param>
         /// <exception cref="Exception">Tunngle</exception>
-        public ServerConnector(int port, int slot, bool tunngle, Process process)
+        public ServerConnector(int port, int slot, bool tunngle, string name, Process process)
         {
+            this.name = name;
             this.port = port;
             this.slot = slot;
             this.tunngle = tunngle;
@@ -57,6 +59,7 @@ namespace chivalry_announcer
 
             var sd = new ServerDataObject();
 
+            sd.name = name;
             sd.map = match.Groups[1].Value;
             sd.players = int.Parse(match.Groups[2].Value);
             sd.ip = ip;

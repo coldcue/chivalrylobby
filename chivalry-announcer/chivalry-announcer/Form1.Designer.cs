@@ -42,9 +42,12 @@
             this.label3 = new System.Windows.Forms.Label();
             this.portTextBox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.serverNameTextBox = new System.Windows.Forms.TextBox();
             this.panel1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -97,7 +100,7 @@
             // 
             // startstopButton
             // 
-            this.startstopButton.Location = new System.Drawing.Point(161, 93);
+            this.startstopButton.Location = new System.Drawing.Point(161, 129);
             this.startstopButton.Name = "startstopButton";
             this.startstopButton.Size = new System.Drawing.Size(102, 38);
             this.startstopButton.TabIndex = 5;
@@ -170,11 +173,29 @@
             this.label2.TabIndex = 0;
             this.label2.Text = "Port:";
             // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.serverNameTextBox);
+            this.groupBox2.Location = new System.Drawing.Point(114, 70);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(198, 45);
+            this.groupBox2.TabIndex = 7;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Server name";
+            // 
+            // serverNameTextBox
+            // 
+            this.serverNameTextBox.Location = new System.Drawing.Point(7, 15);
+            this.serverNameTextBox.Name = "serverNameTextBox";
+            this.serverNameTextBox.Size = new System.Drawing.Size(185, 20);
+            this.serverNameTextBox.TabIndex = 0;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(324, 203);
+            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.startstopButton);
             this.Controls.Add(this.statusStrip1);
@@ -192,6 +213,8 @@
             this.statusStrip1.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -212,6 +235,8 @@
         private System.Windows.Forms.TextBox portTextBox;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.CheckBox TunngleCheckBox;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.TextBox serverNameTextBox;
     }
 }
 

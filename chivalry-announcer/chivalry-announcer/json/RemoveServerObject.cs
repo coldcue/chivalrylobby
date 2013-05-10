@@ -8,7 +8,6 @@ namespace chivalry_announcer
 {
     class RemoveServerObject : SecurityImpl
     {
-        public string method = "remove";
         public string ip;
         public int port;
         public bool tunngle;

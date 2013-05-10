@@ -44,11 +44,11 @@ namespace chivalry_announcer
         /// <param name="port"></param>
         /// <param name="slot"></param>
         /// <exception cref="Exception"></exception>
-        internal static void initServer(bool tunngle, int port, int slot)
+        internal static void initServer(bool tunngle, int port, int slot, string name)
         {
             Process process = ServerConnector.getServerProcess();
             if (process == null) throw new Exception("Your server isn't running!");
-            server = new ServerConnector(port, slot, tunngle, process);
+            server = new ServerConnector(port, slot, tunngle, name, process);
         }
     }
 }

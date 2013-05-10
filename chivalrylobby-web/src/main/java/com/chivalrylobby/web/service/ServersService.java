@@ -15,16 +15,53 @@ import org.springframework.transaction.annotation.Transactional;
 import com.chivalrylobby.web.entity.Server;
 import com.chivalrylobby.web.entity.enums.ServerGamemodes;
 import com.chivalrylobby.web.entity.enums.ServerMaps;
+import com.chivalrylobby.web.json.support.RegisterServer;
 import com.google.appengine.api.datastore.Key;
 
 public class ServersService {
 	EntityManagerFactory emf;
 
-	public ServersService() {
-	}
-
 	public void setEmf(EntityManagerFactory emf) {
 		this.emf = emf;
+	}
+
+	@Transactional
+	public Server registerServer(RegisterServer registerServer)
+			throws Exception {
+
+		// Checks that is there a server like this
+		try {
+			if (getServer(registerServer.getIp(), registerServer.getPort()) != null) {
+				throw new Exception("Server is already registered!");
+			}
+		} catch (Exception e) {
+			// Do nothing
+		}
+
+		// New server
+		Server newServer = registerServer.createServer();
+
+		// TODO get country
+		newServer.setCountry("de");
+		newServer.setGamemode(ServerGamemodes.ND);
+		newServer.setMap(ServerMaps.ND);
+		newServer.setLastonline(new Date());
+		newServer.setLastupdate(new Date());
+		newServer.setOnline(true);
+
+		EntityManager em = emf.createEntityManager();
+		EntityTransaction tx = em.getTransaction();
+		try {
+			tx.begin();
+			em.persist(newServer);
+			tx.commit();
+			em.close();
+			return newServer;
+		} catch (Exception e) {
+			tx.rollback();
+			em.close();
+			throw e;
+		}
 	}
 
 	/**
@@ -36,8 +73,27 @@ public class ServersService {
 	@Transactional
 	public Server getServer(Key id) {
 		EntityManager em = emf.createEntityManager();
+		Server ret = em.find(Server.class, id);
 		em.close();
-		return em.find(Server.class, id);
+		return ret;
+	}
+
+	/**
+	 * Gets a server by IP and PORT
+	 * 
+	 * @param ip
+	 * @param port
+	 * @return
+	 */
+	public Server getServer(String ip, int port) {
+		EntityManager em = emf.createEntityManager();
+		Server ret = (Server) em
+				.createQuery(
+						"SELECT s FROM Server s WHERE s.ip = :ip AND s.port = :port")
+				.setParameter("ip", ip).setParameter("port", port)
+				.getSingleResult();
+		em.close();
+		return ret;
 	}
 
 	@SuppressWarnings("unchecked")

@@ -8,9 +8,9 @@ namespace chivalry_announcer
 {
     class RegisterServerObject : SecurityImpl
     {
-        public string method = "register";
         public string ip;
         public int port;
         public bool tunngle;
+        public string name;
     }
 }

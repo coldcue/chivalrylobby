@@ -12,7 +12,7 @@ namespace chivalry_announcer
 {
     class MasterServerConnector
     {
-        private static string url = "http://chivalrylobby.info/cla?q=";
+        private static string url = "http://test.chivalrylobby.info/clapi/";
 
         /// <summary>
         /// Registers the server in the master server
@@ -30,6 +30,7 @@ namespace chivalry_announcer
             data.ip = sd.ip;
             data.port = sd.port;
             data.tunngle = sd.tunngle;
+            data.name = sd.name;
 
             data.generateSecurity();
 
@@ -37,7 +38,7 @@ namespace chivalry_announcer
 
             try
             {
-                Task<string> clientTask = client.GetStringAsync(new Uri(url + json));
+                Task<string> clientTask = client.GetStringAsync(new Uri(url + "register?q=" + json));
                 clientTask.Wait();
                 ResponseMessageObject result = JsonConvert.DeserializeObject<ResponseMessageObject>(clientTask.Result);
                 Console.WriteLine(clientTask.Result);
@@ -72,7 +73,7 @@ namespace chivalry_announcer
 
             string json = JsonConvert.SerializeObject(data, new JavaScriptDateTimeConverter());
 
-            Task<string> clientTask = client.GetStringAsync(new Uri(url + json));
+            Task<string> clientTask = client.GetStringAsync(new Uri(url + "data?q=" + json));
             clientTask.Wait();
             ResponseMessageObject result = JsonConvert.DeserializeObject<ResponseMessageObject>(clientTask.Result);
             Console.WriteLine(clientTask.Result);
@@ -86,7 +87,6 @@ namespace chivalry_announcer
         public static void removeServer(ServerConnector sc)
         {
             var client = new HttpClient();
-
             var data = new RemoveServerObject(sc.ip, sc.port, sc.tunngle);
 
             data.generateSecurity();
@@ -95,7 +95,7 @@ namespace chivalry_announcer
 
             try
             {
-                Task<string> clientTask = client.GetStringAsync(new Uri(url + json));
+                Task<string> clientTask = client.GetStringAsync(new Uri(url + "remove?q=" + json));
                 clientTask.Wait();
                 ResponseMessageObject result = JsonConvert.DeserializeObject<ResponseMessageObject>(clientTask.Result);
                 Console.WriteLine(clientTask.Result);
