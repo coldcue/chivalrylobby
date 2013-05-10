@@ -8,6 +8,7 @@ import java.util.TreeSet;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
 import org.springframework.cache.Cache;
@@ -20,8 +21,6 @@ import com.chivalrylobby.web.clapi.RefreshServerData;
 import com.chivalrylobby.web.clapi.RegisterServerData;
 import com.chivalrylobby.web.clapi.RemoveServerData;
 import com.chivalrylobby.web.entity.Server;
-import com.chivalrylobby.web.entity.enums.ServerGamemodes;
-import com.chivalrylobby.web.entity.enums.ServerMaps;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 
@@ -83,7 +82,7 @@ public class ServersService {
 					.getSingleResult();
 
 			// Add server to cache
-			addServerToCache(server);
+			putServerInCache(server);
 
 			return server;
 		} catch (Exception e) {
@@ -153,58 +152,155 @@ public class ServersService {
 	}
 
 	/**
-	 * Adds a server to the cache
+	 * Adds a server to the cache or if its already there, it will overwrite it
 	 * 
 	 * @param server
 	 */
-	private void addServerToCache(Server server) {
+	private void putServerInCache(Server server) {
 		Cache cache = cacheManager.getCache(cacheName);
 
 		@SuppressWarnings("unchecked")
 		Set<Long> cachedServers = (Set<Long>) cache.get("cachedServers").get();
 
 		cache.put(server.getKey().getId(), server);
-		cachedServers.add(server.getKey().getId());
-		cache.put("cachedServers", cachedServers);
+
+		// If its in the list, then don't upload the list again
+		if (!cachedServers.contains(server.getKey().getId())) {
+			cachedServers.add(server.getKey().getId());
+			cache.put("cachedServers", cachedServers);
+		}
+
 		cache.evict("getOnlineServers");
 	}
 
-	public void test() {
-		EntityManager em = entityManagerFactory.createEntityManager();
-		em.getTransaction().begin();
+	private void removeServerFromCache(Server server) {
+		Cache cache = cacheManager.getCache(cacheName);
 
-		Server server = new Server();
-		server.setCountry("de");
-		server.setGamemode(ServerGamemodes.AOCKOTH);
-		server.setMap(ServerMaps.DARKFOREST);
-		server.setIp("124.123.235.165");
-		server.setPort(7777);
-		server.setOnline(true);
-		server.setSlot(64);
-		server.setPlayers(21);
-		server.setName("[AS] Asdblah lorem ipsum BA/HG/W");
-		server.setTunngle(false);
-		server.setLastonline(new Date());
-		server.setLastupdate(new Date());
-		em.persist(server);
-		em.getTransaction().commit();
-		em.close();
+		@SuppressWarnings("unchecked")
+		Set<Long> cachedServers = (Set<Long>) cache.get("cachedServers").get();
 
-		addServerToCache(server);
+		cache.evict(server.getKey().getId());
+
+		// If it isn't in the list, then don't upload the list again
+		if (!cachedServers.contains(server.getKey().getId())) {
+			cachedServers.remove(server.getKey().getId());
+			cache.put("cachedServers", cachedServers);
+		}
+
+		cache.evict("getOnlineServers");
 	}
+
+	// public void test() {
+	// EntityManager em = entityManagerFactory.createEntityManager();
+	// em.getTransaction().begin();
+	//
+	// Server server = new Server();
+	// server.setCountry("de");
+	// server.setGamemode(ServerGamemodes.AOCKOTH);
+	// server.setMap(ServerMaps.DARKFOREST);
+	// server.setIp("124.123.235.165");
+	// server.setPort(7777);
+	// server.setOnline(true);
+	// server.setSlot(64);
+	// server.setPlayers(21);
+	// server.setName("[AS] Asdblah lorem ipsum BA/HG/W");
+	// server.setTunngle(false);
+	// server.setLastonline(new Date());
+	// server.setLastupdate(new Date());
+	// em.persist(server);
+	// em.getTransaction().commit();
+	// em.close();
+	//
+	// putServerInCache(server);
+	// }
 
 	public Server register(RegisterServerData data) {
-		// TODO Auto-generated method stub
-		return null;
+
+		// If its already registered, then return the existing
+		try {
+			Server server = getServer(data.getIp(), data.getPort());
+			return server;
+		} catch (Exception e) {
+			// Do nothing
+		}
+
+		Server server = data.createServer();
+		server.setLastonline(new Date());
+		server.setLastupdate(new Date());
+		server.setOnline(false);
+
+		// TODO test IP if not tunngle
+
+		EntityManager em = entityManagerFactory.createEntityManager();
+		EntityTransaction tx = em.getTransaction();
+		try {
+			tx.begin();
+			// Persist the new server
+			em.persist(server);
+			tx.commit();
+		} catch (Exception e) {
+			tx.rollback();
+		} finally {
+			em.close();
+		}
+
+		return server;
 	}
 
-	public Server refresh(RefreshServerData data) {
-		// TODO Auto-generated method stub
-		return null;
+	public Server refresh(RefreshServerData data) throws Exception {
+
+		// Get the server
+		Server server = getServer(KeyFactory.createKey(Server.class.getName(),
+				data.getId()));
+
+		EntityManager em = entityManagerFactory.createEntityManager();
+		EntityTransaction tx = em.getTransaction();
+		try {
+			tx.begin();
+
+			server.setMap(data.getMaps());
+			server.setGamemode(data.getGamemode());
+
+			// If the current players are more then the slot, it will be max
+			if (data.getPlayers() > server.getSlot())
+				server.setPlayers(server.getSlot());
+			else
+				server.setPlayers(data.getPlayers());
+
+			server.setOnline(true);
+			server.setLastupdate(new Date());
+
+			tx.commit();
+		} catch (Exception e) {
+			tx.rollback();
+		} finally {
+			em.close();
+		}
+
+		putServerInCache(server);
+
+		return server;
 	}
 
-	public void remove(RemoveServerData data) {
-		// TODO Auto-generated method stub
+	public void remove(RemoveServerData data) throws Exception {
+		// Get the server
+		Server server = getServer(KeyFactory.createKey(Server.class.getName(),
+				data.getId()));
+
+		// Remove from cache
+		removeServerFromCache(server);
+
+		EntityManager em = entityManagerFactory.createEntityManager();
+		EntityTransaction tx = em.getTransaction();
+		try {
+			tx.begin();
+			em.remove(server);
+			tx.commit();
+		} catch (Exception e) {
+			tx.rollback();
+		} finally {
+			em.close();
+		}
 
 	}
 }

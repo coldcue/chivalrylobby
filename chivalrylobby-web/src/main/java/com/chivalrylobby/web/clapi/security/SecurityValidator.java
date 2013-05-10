@@ -12,7 +12,7 @@ public class SecurityValidator implements Validator {
 
 	@Override
 	public void validate(Object target, Errors errors) {
-		// TODO Auto-generated method stub
+		// TODO do the security validation
 
 	}
 

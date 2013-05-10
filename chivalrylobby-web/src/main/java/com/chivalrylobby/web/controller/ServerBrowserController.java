@@ -13,6 +13,7 @@ import com.chivalrylobby.web.service.ServersService;
 
 @Controller
 public class ServerBrowserController {
+	@SuppressWarnings("unused")
 	private static final Logger log = Logger
 			.getLogger(ServerBrowserController.class.getName());
 
@@ -29,9 +30,9 @@ public class ServerBrowserController {
 		return mav;
 	}
 
-	@RequestMapping("/test")
-	public void test() {
-		serversService.test();
-		log.info("Test called...");
-	}
+	// @RequestMapping("/test")
+	// public void test() {
+	// serversService.test();
+	// log.info("Test called...");
+	// }
 }
