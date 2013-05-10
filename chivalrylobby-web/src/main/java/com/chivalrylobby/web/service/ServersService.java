@@ -30,13 +30,15 @@ public class ServersService {
 			throws Exception {
 
 		// Checks that is there a server like this
+		Server server = null;
 		try {
-			if (getServer(registerServer.getIp(), registerServer.getPort()) != null) {
-				throw new Exception("Server is already registered!");
-			}
+			server = getServer(registerServer.getIp(), registerServer.getPort());
 		} catch (Exception e) {
 			// Do nothing
 		}
+
+		if (server != null)
+			throw new Exception("Server is already registered!");
 
 		// New server
 		Server newServer = registerServer.createServer();
