@@ -7,6 +7,8 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+import com.chivalrylobby.web.clapi.security.SecurityValidator;
+
 public class RegisterServerDataValidator implements Validator {
 
 	private static final String IP_PATTERN = "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
@@ -27,6 +29,10 @@ public class RegisterServerDataValidator implements Validator {
 		ValidationUtils.rejectIfEmpty(errors, "port", "port.empty");
 		ValidationUtils.rejectIfEmpty(errors, "slot", "slot.empty");
 		ValidationUtils.rejectIfEmpty(errors, "tunngle", "tunngle.empty");
+
+		// Check security
+		SecurityValidator securityValidator = new SecurityValidator();
+		ValidationUtils.invokeValidator(securityValidator, target, errors);
 
 		RegisterServerData data = (RegisterServerData) target;
 		if (!validateIp(data.getIp()))

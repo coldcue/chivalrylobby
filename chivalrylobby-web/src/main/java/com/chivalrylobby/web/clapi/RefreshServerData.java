@@ -11,6 +11,7 @@ import com.chivalrylobby.web.entity.enums.ServerMaps;
  * 
  */
 public class RefreshServerData extends SecurityImpl {
+	private long id;
 	private String map;
 	private int players;
 
@@ -23,6 +24,14 @@ public class RefreshServerData extends SecurityImpl {
 
 	public ServerMaps getMaps() {
 		return maps;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	public String getMap() {
