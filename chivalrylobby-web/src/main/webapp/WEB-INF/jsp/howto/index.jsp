@@ -7,15 +7,12 @@
 <div class="container_12">
 	<div class="grid_8">
 		<div class="content-box">
-			<h1>HOW-TO</h1>
-		</div>
-		<div class="content-box">
 			<a href="/howto/install">
 				<h1>HOW TO INSTALL THE GAME</h1>
 			</a>
 		</div>
 		<div class="content-box">
-			<a href="/howto/conntect">
+			<a href="/howto/connect">
 				<h1>HOW TO CONNECT</h1>
 			</a>
 		</div>

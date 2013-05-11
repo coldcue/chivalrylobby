@@ -36,7 +36,7 @@
 			<div id="ID-menu">
 				<ul>
 					<li><a href="/">SERVER BROWSER</a></li>
-					<li><a href="/howto">HOW-TO</a></li>
+					<li><a href="/howto/">HOW-TO</a></li>
 					<li><a href="http://chivalrytunngle.freeforums.org">CHIVALRY
 							FORUM</a></li>
 					<li><a href="http://bit.ly/Wf36L2">TUNNGLE WIKI</a></li>
