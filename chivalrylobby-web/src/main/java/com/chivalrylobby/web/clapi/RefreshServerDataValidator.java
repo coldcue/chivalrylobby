@@ -25,7 +25,7 @@ public class RefreshServerDataValidator implements Validator {
 		ValidationUtils.invokeValidator(securityValidator, target, errors);
 
 		RefreshServerData data = (RefreshServerData) target;
-		if (data.getPlayers() < 0 || data.getPlayers() > 64)
+		if (data.getPlayers() < 0)
 			errors.reject("invalid.players");
 	}
 

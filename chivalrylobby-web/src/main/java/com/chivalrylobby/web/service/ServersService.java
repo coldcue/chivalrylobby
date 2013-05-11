@@ -1,7 +1,7 @@
 package com.chivalrylobby.web.service;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -227,8 +227,7 @@ public class ServersService {
 		// }
 
 		Server server = data.createServer();
-		server.setLastonline(new Date());
-		server.setLastupdate(new Date());
+		server.setLastupdate(Calendar.getInstance().getTimeInMillis());
 		server.setOnline(false);
 		server.setCountry(country);
 
@@ -261,7 +260,7 @@ public class ServersService {
 			server.setPlayers(data.getPlayers());
 
 		server.setOnline(true);
-		server.setLastupdate(new Date());
+		server.setLastupdate(Calendar.getInstance().getTimeInMillis());
 
 		putServerInCache(server);
 
@@ -277,5 +276,20 @@ public class ServersService {
 		removeServerFromCache(server);
 
 		entityManager.remove(server);
+	}
+
+	@Transactional
+	public void deleteStaleServers() {
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.MINUTE, -16);
+
+		int deleted = entityManager
+				.createQuery("DELETE FROM Server s WHERE s.lastupdate < :date")
+				.setParameter("date", cal.getTimeInMillis()).executeUpdate();
+
+		if (deleted > 0) {
+			cacheManager.getCache(cacheName).evict("cachedServers");
+			cacheManager.getCache(cacheName).evict("getOnlineServers");
+		}
 	}
 }

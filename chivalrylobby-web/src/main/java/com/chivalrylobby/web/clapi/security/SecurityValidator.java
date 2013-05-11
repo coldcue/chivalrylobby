@@ -7,7 +7,7 @@ public class SecurityValidator implements Validator {
 
 	@Override
 	public boolean supports(Class<?> clazz) {
-		return SecurityImpl.class.isInstance(clazz);
+		return true;
 	}
 
 	@Override

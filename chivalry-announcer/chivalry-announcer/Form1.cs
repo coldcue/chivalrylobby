@@ -133,7 +133,7 @@ namespace chivalry_announcer
 
             //Test server name
             this.name = serverNameTextBox.Text;
-            if (name.Length > 32 || name.Length < 8) throw new Exception("The length of the server name must be between 8 and 32 characters!");
+            if (name.Length > 40 || name.Length < 6) throw new Exception("The length of the server name must be between 6 and 40 characters!");
 
         }
 

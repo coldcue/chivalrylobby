@@ -14,7 +14,7 @@ namespace chivalry_announcer
 {
     class MasterServerConnector
     {
-        private static string url = "http://localhost:8080/clapi/";
+        private static string url = "http://test.chivalrylobby.info/clapi/";
 
         public static string getRealIP()
         {

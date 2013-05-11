@@ -7,17 +7,19 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ValidationUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.chivalrylobby.web.clapi.RefreshServerData;
+import com.chivalrylobby.web.clapi.RefreshServerDataValidator;
 import com.chivalrylobby.web.clapi.RegisterServerData;
+import com.chivalrylobby.web.clapi.RegisterServerDataValidator;
 import com.chivalrylobby.web.clapi.RemoveServerData;
 import com.chivalrylobby.web.clapi.ResponseMessage;
-import com.chivalrylobby.web.clapi.security.SecurityValidator;
 import com.chivalrylobby.web.entity.Server;
 import com.chivalrylobby.web.service.ServersService;
 
@@ -36,11 +38,17 @@ public class ClientApiController {
 	@Autowired
 	ServersService serversService;
 
-	@RequestMapping(value = "/register", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+	@RequestMapping(value = "register", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
 	public @ResponseBody
-	ResponseMessage register(@Validated @RequestBody RegisterServerData data,
-			HttpServletRequest request) {
+	ResponseMessage register(@RequestBody RegisterServerData data,
+			Errors errors, HttpServletRequest request) {
 		try {
+
+			// Validate it
+			ValidationUtils.invokeValidator(new RegisterServerDataValidator(),
+					data, errors);
+			if (errors.hasErrors())
+				throw new Exception();
 
 			String country = "";
 			if (request.getHeader("X-AppEngine-Country") != null)
@@ -58,10 +66,16 @@ public class ClientApiController {
 		}
 	}
 
-	@RequestMapping(value = "/refresh", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+	@RequestMapping(value = "refresh", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
 	public @ResponseBody
-	ResponseMessage refresh(@Validated @RequestBody RefreshServerData data) {
+	ResponseMessage refresh(@RequestBody RefreshServerData data, Errors errors) {
 		try {
+			// Validate it
+			ValidationUtils.invokeValidator(new RefreshServerDataValidator(),
+					data, errors);
+			if (errors.hasErrors())
+				throw new Exception();
+
 			serversService.refresh(data);
 			return new ResponseMessage(true, "Server successfully refreshed!");
 		} catch (Exception e) {
@@ -70,11 +84,16 @@ public class ClientApiController {
 		}
 	}
 
-	@RequestMapping(value = "/remove", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+	@RequestMapping(value = "remove", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
 	public @ResponseBody
-	ResponseMessage remove(
-			@Validated(value = { SecurityValidator.class }) @RequestBody RemoveServerData data) {
+	ResponseMessage remove(@RequestBody RemoveServerData data, Errors errors) {
 		try {
+			// Validate it
+			ValidationUtils.invokeValidator(new RegisterServerDataValidator(),
+					data, errors);
+			if (errors.hasErrors())
+				throw new Exception();
+
 			serversService.remove(data);
 			return new ResponseMessage(true, "Server successfully removed!");
 		} catch (Exception e) {

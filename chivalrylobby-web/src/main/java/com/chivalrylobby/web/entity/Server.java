@@ -1,15 +1,12 @@
 package com.chivalrylobby.web.entity;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import com.chivalrylobby.web.entity.enums.ServerGamemodes;
 import com.chivalrylobby.web.entity.enums.ServerMaps;
@@ -42,11 +39,7 @@ public class Server implements Serializable {
 
 	private boolean tunngle;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date lastupdate;
-
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date lastonline;
+	private long lastupdate;
 
 	private ServerMaps map;
 
@@ -127,22 +120,6 @@ public class Server implements Serializable {
 		this.tunngle = tunngle;
 	}
 
-	public Date getLastupdate() {
-		return lastupdate;
-	}
-
-	public void setLastupdate(Date lastupdate) {
-		this.lastupdate = lastupdate;
-	}
-
-	public Date getLastonline() {
-		return lastonline;
-	}
-
-	public void setLastonline(Date lastonline) {
-		this.lastonline = lastonline;
-	}
-
 	public ServerMaps getMap() {
 		return map;
 	}
@@ -157,6 +134,14 @@ public class Server implements Serializable {
 
 	public void setGamemode(ServerGamemodes gamemode) {
 		this.gamemode = gamemode;
+	}
+
+	public long getLastupdate() {
+		return lastupdate;
+	}
+
+	public void setLastupdate(long lastupdate) {
+		this.lastupdate = lastupdate;
 	}
 
 }

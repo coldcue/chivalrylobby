@@ -35,10 +35,10 @@ public class RegisterServerDataValidator implements Validator {
 		ValidationUtils.invokeValidator(securityValidator, target, errors);
 
 		RegisterServerData data = (RegisterServerData) target;
-		if (data.isTunngle() && !validateIp(data.getIp()))
+		if (!validateIp(data.getIp()))
 			errors.reject("ip.invalid");
-		if (data.getName().length() > 32)
-			errors.reject("name.long");
+		if (data.getName().length() < 6 || data.getName().length() > 40)
+			errors.reject("name.invalid");
 		if (data.getPort() < 0 || data.getPort() > 65535)
 			errors.reject("port.invalid");
 		if (data.getSlot() < 8 || data.getSlot() > 64)
