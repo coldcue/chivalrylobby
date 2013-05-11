@@ -13,4 +13,22 @@ public class HowtoController {
 		ModelAndView mav = new ModelAndView("howto/index");
 		return mav;
 	}
+
+	@RequestMapping("/install")
+	public ModelAndView install() {
+		ModelAndView mav = new ModelAndView("howto/install");
+		return mav;
+	}
+
+	@RequestMapping("/connect")
+	public ModelAndView connect() {
+		ModelAndView mav = new ModelAndView("howto/connect");
+		return mav;
+	}
+
+	@RequestMapping("/createserver")
+	public ModelAndView createserver() {
+		ModelAndView mav = new ModelAndView("howto/createserver");
+		return mav;
+	}
 }
