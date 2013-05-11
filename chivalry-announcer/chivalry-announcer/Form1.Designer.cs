@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.label1 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label4 = new System.Windows.Forms.Label();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
@@ -44,6 +45,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.serverNameTextBox = new System.Windows.Forms.TextBox();
+            this.panel2 = new System.Windows.Forms.Panel();
             this.panel1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -53,28 +55,43 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold);
-            this.label1.ForeColor = System.Drawing.Color.NavajoWhite;
-            this.label1.Location = new System.Drawing.Point(12, 11);
+            this.label1.Font = new System.Drawing.Font("Arial", 27.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.White;
+            this.label1.Location = new System.Drawing.Point(26, 22);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(251, 24);
+            this.label1.Size = new System.Drawing.Size(420, 44);
             this.label1.TabIndex = 0;
-            this.label1.Text = "ChivalryLobby Announcer";
+            this.label1.Text = "CHIVALRY LOBBY.info";
             // 
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.Black;
+            this.panel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel1.Controls.Add(this.label4);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Location = new System.Drawing.Point(0, -1);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(325, 44);
+            this.panel1.Size = new System.Drawing.Size(476, 111);
             this.panel1.TabIndex = 1;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Arial", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.ForeColor = System.Drawing.Color.LightGray;
+            this.label4.Location = new System.Drawing.Point(31, 68);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(139, 24);
+            this.label4.TabIndex = 1;
+            this.label4.Text = "ANNOUNCER";
             // 
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
+            this.linkLabel1.BackColor = System.Drawing.Color.White;
             this.linkLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.linkLabel1.Location = new System.Drawing.Point(12, 46);
+            this.linkLabel1.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.linkLabel1.Location = new System.Drawing.Point(27, 160);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(190, 17);
             this.linkLabel1.TabIndex = 2;
@@ -84,28 +101,35 @@
             // 
             // statusStrip1
             // 
+            this.statusStrip1.BackColor = System.Drawing.Color.Black;
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 181);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 356);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(324, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(473, 22);
             this.statusStrip1.TabIndex = 4;
             this.statusStrip1.Text = "statusStrip1";
+            this.statusStrip1.UseWaitCursor = true;
             // 
             // toolStripStatusLabel1
             // 
+            this.toolStripStatusLabel1.ForeColor = System.Drawing.Color.White;
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(39, 17);
             this.toolStripStatusLabel1.Text = "Status";
             // 
             // startstopButton
             // 
-            this.startstopButton.Location = new System.Drawing.Point(161, 129);
+            this.startstopButton.BackColor = System.Drawing.Color.Silver;
+            this.startstopButton.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.startstopButton.ForeColor = System.Drawing.Color.Black;
+            this.startstopButton.Location = new System.Drawing.Point(176, 243);
             this.startstopButton.Name = "startstopButton";
             this.startstopButton.Size = new System.Drawing.Size(102, 38);
             this.startstopButton.TabIndex = 5;
             this.startstopButton.Text = "Announce!";
             this.startstopButton.UseVisualStyleBackColor = true;
+            this.startstopButton.UseWaitCursor = true;
             this.startstopButton.Click += new System.EventHandler(this.startstopButton_Click);
             // 
             // timer1
@@ -115,12 +139,14 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.BackColor = System.Drawing.Color.White;
             this.groupBox1.Controls.Add(this.TunngleCheckBox);
             this.groupBox1.Controls.Add(this.slotTextBox);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.portTextBox);
             this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Location = new System.Drawing.Point(12, 70);
+            this.groupBox1.ForeColor = System.Drawing.Color.Black;
+            this.groupBox1.Location = new System.Drawing.Point(27, 184);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(96, 98);
             this.groupBox1.TabIndex = 6;
@@ -175,8 +201,10 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.BackColor = System.Drawing.Color.White;
             this.groupBox2.Controls.Add(this.serverNameTextBox);
-            this.groupBox2.Location = new System.Drawing.Point(114, 70);
+            this.groupBox2.ForeColor = System.Drawing.Color.Black;
+            this.groupBox2.Location = new System.Drawing.Point(129, 184);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(198, 45);
             this.groupBox2.TabIndex = 7;
@@ -190,22 +218,36 @@
             this.serverNameTextBox.Size = new System.Drawing.Size(185, 20);
             this.serverNameTextBox.TabIndex = 0;
             // 
+            // panel2
+            // 
+            this.panel2.BackColor = System.Drawing.Color.White;
+            this.panel2.Location = new System.Drawing.Point(0, 149);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(337, 155);
+            this.panel2.TabIndex = 8;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(324, 203);
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.BackgroundImage = global::chivalry_announcer.Properties.Resources.bg1;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.ClientSize = new System.Drawing.Size(473, 378);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.startstopButton);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.panel1);
+            this.Controls.Add(this.panel2);
+            this.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "ChivalryLobby Announcer";
+            this.UseWaitCursor = true;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
@@ -237,6 +279,8 @@
         private System.Windows.Forms.CheckBox TunngleCheckBox;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.TextBox serverNameTextBox;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Panel panel2;
     }
 }
 
