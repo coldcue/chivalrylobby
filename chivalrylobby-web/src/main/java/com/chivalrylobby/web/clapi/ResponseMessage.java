@@ -3,7 +3,7 @@ package com.chivalrylobby.web.clapi;
 public class ResponseMessage {
 	private boolean success;
 	private String message;
-	private Long id = null;
+	private Long id = (long) 0;
 
 	public ResponseMessage(boolean success, String message) {
 		this.success = success;

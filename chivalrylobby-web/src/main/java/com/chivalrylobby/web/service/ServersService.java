@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -23,7 +24,6 @@ import com.chivalrylobby.web.clapi.RefreshServerData;
 import com.chivalrylobby.web.clapi.RegisterServerData;
 import com.chivalrylobby.web.clapi.RemoveServerData;
 import com.chivalrylobby.web.entity.Server;
-import com.chivalrylobby.web.service.support.Geolocation;
 import com.google.appengine.api.datastore.KeyFactory;
 
 @Component("serversService")
@@ -32,6 +32,9 @@ public class ServersService {
 
 	@Autowired
 	private CacheManager cacheManager;
+
+	@Autowired
+	private EntityManagerFactory entityManagerFactory;
 
 	@PersistenceContext
 	private EntityManager entityManager;
@@ -212,31 +215,25 @@ public class ServersService {
 	// }
 
 	@Transactional
-	public Server register(RegisterServerData data) {
+	public Server register(RegisterServerData data, String country) {
 
 		// If its already registered, then return the existing
-		try {
-			Server server = getServer(data.getIp(), data.getPort());
-			return server;
-		} catch (Exception e) {
-			// Do nothing
-		}
+		// try {
+		// Server temp = getServer(data.getIp(), data.getPort());
+		// removeServerFromCache(temp);
+		// entityManager.remove(temp);
+		// } catch (Exception e) {
+		// throw e;
+		// }
 
 		Server server = data.createServer();
 		server.setLastonline(new Date());
 		server.setLastupdate(new Date());
 		server.setOnline(false);
+		server.setCountry(country);
 
 		// TODO test IP if not tunngle
-		if (server.isTunngle()) {
-			server.setCountry("tg");
-		} else {
-			try {
-				server.setCountry(Geolocation.getCountry(server.getIp()));
-			} catch (Exception e) {
-				server.setCountry("nd");
-			}
-		}
+		server.setIp(data.getIp());
 
 		// Persist the new server
 		entityManager.persist(server);

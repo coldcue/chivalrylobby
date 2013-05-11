@@ -9,18 +9,19 @@ namespace chivalry_announcer
 {
     abstract class SecurityImpl
     {
+        private const string blowfish = "l5381H5sW32620tO";
         public string key;
         public string hash;
-        public DateTime time;
+        public string time;
 
         /// <summary>
         /// Generates security stuff to the object
         /// </summary>
         public void generateSecurity()
         {
-            time = DateTime.Now;
+            time = DateTime.Now.ToUniversalTime().ToString();
             key = CalculateMD5Hash(new Random().Next().ToString());
-            hash = CalculateMD5Hash(key + time);
+            hash = CalculateMD5Hash(key + time + blowfish);
         }
 
         /// <summary>

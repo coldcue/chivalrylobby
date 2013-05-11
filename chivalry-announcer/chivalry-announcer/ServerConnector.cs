@@ -15,13 +15,15 @@ namespace chivalry_announcer
         /// <summary>
         /// Only the Tunngle ip is retrieved, otherwise it's null
         /// </summary>
+        /// 
+        public long id;
         public string ip;
         public int port;
         public int slot;
         public bool tunngle;
         public string name;
 
-        public ServerDataObject lastData;
+        public ServerData lastData;
 
         private Process process;
 
@@ -42,7 +44,7 @@ namespace chivalry_announcer
                 ip = getTunngleIp();
                 if (ip == null) throw new Exception("Tunngle IP cannot be determined!");
             }
-            lastData = new ServerDataObject();
+            lastData = new ServerData();
         }
 
         /// <summary>
@@ -50,14 +52,14 @@ namespace chivalry_announcer
         /// </summary>
         /// <returns>A ServerDataObject</returns>
         /// <exception cref="Exception"></exception>
-        public ServerDataObject getServerData()
+        public ServerData getServerData()
         {
             process.Refresh();
             Match match = Regex.Match(process.MainWindowTitle, ".*: (.+) \\(([0-9]+) players\\)");
 
             if (!match.Success) throw new Exception("Server is in invalid status");
 
-            var sd = new ServerDataObject();
+            var sd = new ServerData();
 
             sd.name = name;
             sd.map = match.Groups[1].Value;
@@ -65,8 +67,8 @@ namespace chivalry_announcer
             sd.ip = ip;
             sd.port = port;
             sd.slot = slot;
-            if (sd.players > sd.slot) sd.players = sd.slot;
             sd.tunngle = tunngle;
+            sd.time = DateTime.Now;
 
             return sd;
         }
@@ -105,11 +107,8 @@ namespace chivalry_announcer
         /// <param name="sd1"></param>
         /// <param name="sd2"></param>
         /// <returns>false if no changes, true otherwise</returns>
-        public static bool hasChanges(ServerDataObject sd1, ServerDataObject sd2)
+        public static bool hasChanges(ServerData sd1, ServerData sd2)
         {
-            if (sd1.ip != sd2.ip) return true;
-            if (sd1.port != sd2.port) return true;
-            if (sd1.slot != sd2.slot) return true;
             if (sd1.map != sd2.map) return true;
             if (sd1.players != sd2.players) return true;
             return false;

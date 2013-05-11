@@ -31,8 +31,13 @@ public class ServerBrowserController {
 	}
 
 	// @RequestMapping("/test")
-	// public void test() {
-	// serversService.test();
+	// public @ResponseBody
+	// String test(HttpServletRequest request) {
+	// String ret = new String();
+	//
+	// ret += request.toString();
+	//
 	// log.info("Test called...");
+	// return ret;
 	// }
 }

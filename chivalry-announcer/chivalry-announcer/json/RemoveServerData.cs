@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 
 namespace chivalry_announcer
 {
-    class RegisterServerObject : SecurityImpl
+    class RemoveServerData : SecurityImpl
     {
-        public string ip;
-        public int port;
-        public bool tunngle;
-        public string name;
+        public long id;
+
+        public RemoveServerData(long id)
+        {
+            this.id = id;
+        }
     }
 }

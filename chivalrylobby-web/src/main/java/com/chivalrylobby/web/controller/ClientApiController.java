@@ -3,6 +3,8 @@ package com.chivalrylobby.web.controller;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
@@ -36,9 +38,16 @@ public class ClientApiController {
 
 	@RequestMapping(value = "/register", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
 	public @ResponseBody
-	ResponseMessage register(@Validated @RequestBody RegisterServerData data) {
+	ResponseMessage register(@Validated @RequestBody RegisterServerData data,
+			HttpServletRequest request) {
 		try {
-			Server server = serversService.register(data);
+
+			String country = "";
+			if (request.getHeader("X-AppEngine-Country") != null)
+				country = request.getHeader("X-AppEngine-Country")
+						.toLowerCase();
+
+			Server server = serversService.register(data, country);
 			log.info("Server registered: id:" + server.getKey().getId());
 			return new ResponseMessage(true, "Server successfully registered!",
 					server.getKey().getId());

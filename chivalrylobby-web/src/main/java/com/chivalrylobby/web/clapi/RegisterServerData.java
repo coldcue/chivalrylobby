@@ -23,7 +23,6 @@ public class RegisterServerData extends SecurityImpl {
 	 */
 	public Server createServer() {
 		Server ret = new Server();
-		ret.setIp(ip);
 		ret.setPort(port);
 		ret.setTunngle(tunngle);
 		ret.setSlot(slot);

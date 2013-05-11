@@ -66,7 +66,7 @@ namespace chivalry_announcer
         {
             try
             {
-                MasterServerConnector.removeServer(Program.server);
+                MasterServerConnector.remove(Program.server);
             }
             catch (Exception e)
             {
@@ -132,8 +132,8 @@ namespace chivalry_announcer
             this.tunngle = TunngleCheckBox.Checked;
 
             //Test server name
-            string name = serverNameTextBox.Text;
-            if (name.Length > 32) throw new Exception("The length of the server name must be lower than 32 characters!");
+            this.name = serverNameTextBox.Text;
+            if (name.Length > 32 || name.Length < 8) throw new Exception("The length of the server name must be between 8 and 32 characters!");
 
         }
 
@@ -146,7 +146,7 @@ namespace chivalry_announcer
             try
             {
                 // Send server data
-                var result = MasterServerConnector.sendServerData(Program.server);
+                var result = MasterServerConnector.refresh(Program.server);
 
                 if (result != null)
                 {

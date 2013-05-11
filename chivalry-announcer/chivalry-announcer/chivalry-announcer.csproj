@@ -103,14 +103,15 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="json\SecurityImpl.cs" />
-    <Compile Include="json\RemoveServerObject.cs" />
-    <Compile Include="json\RegisterServerObject.cs" />
-    <Compile Include="json\ResponseMessageObject.cs" />
-    <Compile Include="json\ServerDataObject.cs" />
+    <Compile Include="json\RemoveServerData.cs" />
+    <Compile Include="json\RegisterServerData.cs" />
+    <Compile Include="json\ResponseMessage.cs" />
+    <Compile Include="json\RefreshServerData.cs" />
     <Compile Include="MasterServerConnector.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServerConnector.cs" />
+    <Compile Include="ServerData.cs" />
     <EmbeddedResource Include="Form1.en.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

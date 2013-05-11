@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Untitled Document</title>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+</head>
+
+<body>
+<script type="text/javascript">
+function clapiCall(name, data) {
+$.ajax({
+    headers: { 
+        'Accept': 'application/json',
+        'Content-Type': 'application/json' 
+    },
+    url: "http://test.chivalrylobby.info/clapi/"+name,
+    data: JSON.stringify(data),
+    dataType: 'json',
+	type:"POST",
+    success: function(data) {
+		console.log(data);
+	}
+ });
+}
+</script>
+</body>
+</html>

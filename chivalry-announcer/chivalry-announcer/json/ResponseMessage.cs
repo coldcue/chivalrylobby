@@ -8,6 +8,7 @@ namespace chivalry_announcer
 {
     class ResponseMessageObject : SecurityImpl
     {
+        public long id;
         public bool success;
         public String message;
     }
