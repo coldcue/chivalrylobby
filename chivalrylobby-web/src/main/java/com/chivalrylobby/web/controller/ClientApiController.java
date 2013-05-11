@@ -12,9 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.chivalrylobby.web.clapi.RefreshServerData;
-import com.chivalrylobby.web.clapi.RefreshServerDataValidator;
 import com.chivalrylobby.web.clapi.RegisterServerData;
-import com.chivalrylobby.web.clapi.RegisterServerDataValidator;
 import com.chivalrylobby.web.clapi.RemoveServerData;
 import com.chivalrylobby.web.clapi.ResponseMessage;
 import com.chivalrylobby.web.clapi.security.SecurityValidator;
@@ -38,8 +36,7 @@ public class ClientApiController {
 
 	@RequestMapping(value = "/register", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
 	public @ResponseBody
-	ResponseMessage register(
-			@Validated({ RegisterServerDataValidator.class }) @RequestBody RegisterServerData data) {
+	ResponseMessage register(@Validated @RequestBody RegisterServerData data) {
 		try {
 			Server server = serversService.register(data);
 			log.info("Server registered: id:" + server.getKey().getId());
@@ -54,8 +51,7 @@ public class ClientApiController {
 
 	@RequestMapping(value = "/refresh", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
 	public @ResponseBody
-	ResponseMessage refresh(
-			@Validated({ RefreshServerDataValidator.class }) @RequestBody RefreshServerData data) {
+	ResponseMessage refresh(@Validated @RequestBody RefreshServerData data) {
 		try {
 			serversService.refresh(data);
 			return new ResponseMessage(true, "Server successfully refreshed!");

@@ -23,6 +23,7 @@ import com.chivalrylobby.web.clapi.RefreshServerData;
 import com.chivalrylobby.web.clapi.RegisterServerData;
 import com.chivalrylobby.web.clapi.RemoveServerData;
 import com.chivalrylobby.web.entity.Server;
+import com.chivalrylobby.web.service.support.Geolocation;
 import com.google.appengine.api.datastore.KeyFactory;
 
 @Component("serversService")
@@ -227,6 +228,15 @@ public class ServersService {
 		server.setOnline(false);
 
 		// TODO test IP if not tunngle
+		if (server.isTunngle()) {
+			server.setCountry("tg");
+		} else {
+			try {
+				server.setCountry(Geolocation.getCountry(server.getIp()));
+			} catch (Exception e) {
+				server.setCountry("nd");
+			}
+		}
 
 		// Persist the new server
 		entityManager.persist(server);
