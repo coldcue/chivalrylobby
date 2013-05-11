@@ -20,6 +20,7 @@ import com.chivalrylobby.web.clapi.RegisterServerData;
 import com.chivalrylobby.web.clapi.RegisterServerDataValidator;
 import com.chivalrylobby.web.clapi.RemoveServerData;
 import com.chivalrylobby.web.clapi.ResponseMessage;
+import com.chivalrylobby.web.clapi.security.SecurityValidator;
 import com.chivalrylobby.web.entity.Server;
 import com.chivalrylobby.web.service.ServersService;
 
@@ -89,8 +90,8 @@ public class ClientApiController {
 	ResponseMessage remove(@RequestBody RemoveServerData data, Errors errors) {
 		try {
 			// Validate it
-			ValidationUtils.invokeValidator(new RegisterServerDataValidator(),
-					data, errors);
+			ValidationUtils.invokeValidator(new SecurityValidator(), data,
+					errors);
 			if (errors.hasErrors())
 				throw new Exception();
 
