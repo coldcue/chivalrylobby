@@ -14,7 +14,7 @@ namespace chivalry_announcer
 {
     class MasterServerConnector
     {
-        private static string url = "http://test.chivalrylobby.info/clapi/";
+        private static string url = "http://www.chivalrylobby.info/clapi/";
 
         public static string getRealIP()
         {
@@ -29,7 +29,7 @@ namespace chivalry_announcer
                 foreach (var data in obj)
                 {
                     if (data.Name == "query")
-                        return (string) data.Value;
+                        return (string)data.Value;
                 }
                 throw new Exception();
             }

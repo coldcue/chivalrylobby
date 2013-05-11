@@ -13,7 +13,7 @@
 			<p style="font-weight: bold; font-size: 13px; color: red;">Important!
 				Tunngle or Hamachi is optional!</p>
 			<p>
-				First, you need to choose a server from the <a href="/all">Server
+				First, you need to choose a server from the <a href="/">Server
 					Browser</a> and <b>select then copy it's address with CTRL+C!</b>
 			</p>
 			<p>
