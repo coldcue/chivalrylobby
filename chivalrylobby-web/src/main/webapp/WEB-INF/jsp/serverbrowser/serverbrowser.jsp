@@ -13,16 +13,21 @@
 			<div id="ID-servers">
 				<ul>
 					<c:forEach items="${serverList}" var="server">
-						<li><a href="#">
+						<li><a
+							href="javascript:prompt('Copy the address! CTRL-C','${server.ip}:${server.port}')">
 								<table>
 									<tr>
-										<td class="map"><img src="static/images/maps/${server.map}.png"
-											width="48" height="33" alt="${server.map.fullname}"></td>
+										<td class="map"><img
+											src="static/images/maps/${server.map}.png" width="48"
+											height="33" alt="${server.map.fullname}"></td>
 										<td class="info">
 											<div class="title">${server.name}</div>
 											<div class="other">
 												<img src="/static/images/flags/${server.country}.gif"
-													alt="${server.country}" width="16" height="11"> ${server.ip} - ${server.map.fullname} - ${server.gamemode.fullname}
+													alt="${server.country}" width="16" height="11">
+												${server.ip}:${server.port} - ${server.map.fullname} -
+												${server.gamemode.fullname}
+												<c:if test="server.tunngle"> - Tunngle</c:if>
 											</div>
 										</td>
 										<td class="players">${server.players} / ${server.slot}</td>
