@@ -14,10 +14,7 @@
 
 
 	<!-- Services -->
-	<bean id="serversService" class="com.chivalrylobby.web.service.ServersService">
-		<property name="cacheManager" ref="cacheManager" />
-		<property name="entityManagerFactory" ref="entityManagerFactory" />
-	</bean>
+	<context:component-scan base-package="com.chivalrylobby.web.service"></context:component-scan>
 
 	<!-- Enable cacheing -->
 	<bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">

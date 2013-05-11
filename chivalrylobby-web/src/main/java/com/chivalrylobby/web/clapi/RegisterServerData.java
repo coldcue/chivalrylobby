@@ -26,6 +26,7 @@ public class RegisterServerData extends SecurityImpl {
 		ret.setIp(ip);
 		ret.setPort(port);
 		ret.setTunngle(tunngle);
+		ret.setSlot(slot);
 		// Escape name to prevent hacking
 		ret.setName(StringEscapeUtils.escapeHtml(name));
 		return ret;

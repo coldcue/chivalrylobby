@@ -7,15 +7,16 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.Cache.ValueWrapper;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.chivalrylobby.web.clapi.RefreshServerData;
@@ -24,20 +25,15 @@ import com.chivalrylobby.web.clapi.RemoveServerData;
 import com.chivalrylobby.web.entity.Server;
 import com.google.appengine.api.datastore.KeyFactory;
 
+@Component("serversService")
 public class ServersService {
 	private final String cacheName = "servers";
 
-	private EntityManagerFactory entityManagerFactory;
+	@Autowired
 	private CacheManager cacheManager;
 
-	public void setCacheManager(CacheManager cacheManager) {
-		this.cacheManager = cacheManager;
-	}
-
-	public void setEntityManagerFactory(
-			EntityManagerFactory entityManagerFactory) {
-		this.entityManagerFactory = entityManagerFactory;
-	}
+	@PersistenceContext
+	private EntityManager entityManager;
 
 	/**
 	 * Gets a server by Key
@@ -49,9 +45,8 @@ public class ServersService {
 	@Transactional
 	@CachePut(value = cacheName, key = "#id")
 	public Server getServer(long id) throws Exception {
-		EntityManager em = entityManagerFactory.createEntityManager();
 		try {
-			Server ret = em.find(Server.class,
+			Server ret = entityManager.find(Server.class,
 					KeyFactory.createKey(Server.class.getSimpleName(), id));
 
 			// Evict online servers cache
@@ -59,8 +54,6 @@ public class ServersService {
 			return ret;
 		} catch (Exception e) {
 			throw e;
-		} finally {
-			em.close();
 		}
 	}
 
@@ -74,9 +67,8 @@ public class ServersService {
 	 */
 	@Transactional
 	public Server getServer(String ip, int port) {
-		EntityManager em = entityManagerFactory.createEntityManager();
 		try {
-			Server server = (Server) em
+			Server server = (Server) entityManager
 					.createQuery(
 							"SELECT s FROM Server s WHERE s.ip = :ip AND s.port = :port")
 					.setParameter("ip", ip).setParameter("port", port)
@@ -88,8 +80,6 @@ public class ServersService {
 			return server;
 		} catch (Exception e) {
 			throw e;
-		} finally {
-			em.close();
 		}
 	}
 
@@ -130,8 +120,7 @@ public class ServersService {
 			// Do nothing
 		}
 
-		EntityManager em = entityManagerFactory.createEntityManager();
-		Query query = em
+		Query query = entityManager
 				.createQuery("SELECT s FROM Server s WHERE s.online = true");
 
 		Set<Long> cachedServers = new TreeSet<>();
@@ -147,7 +136,6 @@ public class ServersService {
 		// Put server id list into the cache
 		cache.put("cachedServers", cachedServers);
 
-		em.close();
 		return servers;
 	}
 
@@ -240,53 +228,33 @@ public class ServersService {
 
 		// TODO test IP if not tunngle
 
-		EntityManager em = entityManagerFactory.createEntityManager();
-		EntityTransaction tx = em.getTransaction();
-		try {
-			tx.begin();
-			// Persist the new server
-			em.persist(server);
-			tx.commit();
-		} catch (Exception e) {
-			tx.rollback();
-		} finally {
-			em.close();
-		}
+		// Persist the new server
+		entityManager.persist(server);
 
 		return server;
 	}
 
 	@Transactional
 	public Server refresh(RefreshServerData data) throws Exception {
-
-		// Get the server
-		Server server = getServer(data.getId());
-
-		EntityManager em = entityManagerFactory.createEntityManager();
-		EntityTransaction tx = em.getTransaction();
+		Server server = null;
 		try {
-			tx.begin();
-
-			server.setMap(data.getMaps());
-			server.setGamemode(data.getGamemode());
-
-			// If the current players are more then the slot, it will be max
-			if (data.getPlayers() > server.getSlot())
-				server.setPlayers(server.getSlot());
-			else
-				server.setPlayers(data.getPlayers());
-
-			server.setOnline(true);
-			server.setLastupdate(new Date());
-
-			em.persist(server);
-
-			tx.commit();
+			// Get the server
+			server = getServer(data.getId());
 		} catch (Exception e) {
-			tx.rollback();
-		} finally {
-			em.close();
+			throw e;
 		}
+
+		server.setMap(data.getMaps());
+		server.setGamemode(data.getGamemode());
+
+		// If the current players are more then the slot, it will be max
+		if (data.getPlayers() > server.getSlot())
+			server.setPlayers(server.getSlot());
+		else
+			server.setPlayers(data.getPlayers());
+
+		server.setOnline(true);
+		server.setLastupdate(new Date());
 
 		putServerInCache(server);
 
@@ -301,17 +269,6 @@ public class ServersService {
 		// Remove from cache
 		removeServerFromCache(server);
 
-		EntityManager em = entityManagerFactory.createEntityManager();
-		EntityTransaction tx = em.getTransaction();
-		try {
-			tx.begin();
-			em.remove(server);
-			tx.commit();
-		} catch (Exception e) {
-			tx.rollback();
-		} finally {
-			em.close();
-		}
-
+		entityManager.remove(server);
 	}
 }
