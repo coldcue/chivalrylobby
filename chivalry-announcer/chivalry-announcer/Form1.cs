@@ -242,6 +242,5 @@ namespace chivalry_announcer
             }
         }
 
-
     }
 }

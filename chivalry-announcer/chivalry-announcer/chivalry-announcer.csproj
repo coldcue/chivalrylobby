@@ -165,7 +165,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="favicon.ico" />
-    <None Include="Resources\opacity80.png" />
     <None Include="Resources\bg1.jpg" />
   </ItemGroup>
   <ItemGroup />

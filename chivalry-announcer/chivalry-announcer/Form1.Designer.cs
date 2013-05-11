@@ -109,7 +109,6 @@
             this.statusStrip1.Size = new System.Drawing.Size(473, 22);
             this.statusStrip1.TabIndex = 4;
             this.statusStrip1.Text = "statusStrip1";
-            this.statusStrip1.UseWaitCursor = true;
             // 
             // toolStripStatusLabel1
             // 
@@ -129,7 +128,6 @@
             this.startstopButton.TabIndex = 5;
             this.startstopButton.Text = "Announce!";
             this.startstopButton.UseVisualStyleBackColor = true;
-            this.startstopButton.UseWaitCursor = true;
             this.startstopButton.Click += new System.EventHandler(this.startstopButton_Click);
             // 
             // timer1
@@ -247,7 +245,6 @@
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "ChivalryLobby Announcer";
-            this.UseWaitCursor = true;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();

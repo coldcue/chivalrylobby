@@ -8,8 +8,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.chivalrylobby.web.service.ServersService;
 
 @Controller
-@RequestMapping(value = "/cron", headers = { "X-AppEngine-Cron: true" })
-// @RequestMapping(value = "/cron")
+@RequestMapping(value = "/cron", headers = { "X-AppEngine-Cron=true" })
 public class CronController {
 
 	@Autowired
