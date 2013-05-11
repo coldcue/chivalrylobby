@@ -19,6 +19,7 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.WebApplicationContext;
 
 import com.chivalrylobby.web.clapi.RefreshServerData;
 import com.chivalrylobby.web.clapi.RegisterServerData;
@@ -28,16 +29,82 @@ import com.google.appengine.api.datastore.KeyFactory;
 
 @Component("serversService")
 public class ServersService {
+	@Autowired
+	private CacheManager cacheManager;
+
 	private final String cacheName = "servers";
 
 	@Autowired
-	private CacheManager cacheManager;
+	private WebApplicationContext context;
+
+	@PersistenceContext
+	private EntityManager entityManager;
 
 	@Autowired
 	private EntityManagerFactory entityManagerFactory;
 
-	@PersistenceContext
-	private EntityManager entityManager;
+	@Transactional
+	public void deleteStaleServers() {
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.MINUTE, -16);
+
+		int deleted = entityManager
+				.createQuery("DELETE FROM Server s WHERE s.lastupdate < :date")
+				.setParameter("date", cal.getTimeInMillis()).executeUpdate();
+
+		if (deleted > 0) {
+			cacheManager.getCache(cacheName).evict("cachedServers");
+			cacheManager.getCache(cacheName).evict("getOnlineServers");
+		}
+	}
+
+	/**
+	 * Get Online servers (it has a protective cache)
+	 * 
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	@Cacheable(value = cacheName, key = "#root.methodName")
+	public List<Server> getOnlineServers() {
+		List<Server> servers = new ArrayList<>();
+		Cache cache = cacheManager.getCache(cacheName);
+
+		// First, try the cache
+		try {
+			Set<Long> cachedServers = (Set<Long>) cache.get("cachedServers")
+					.get();
+
+			for (Long id : cachedServers) {
+				servers.add(getServerFromCache(id));
+			}
+
+			refreshStatics(servers);
+
+			return servers;
+		} catch (Exception e) {
+			// Do nothing
+		}
+
+		Query query = entityManager
+				.createQuery("SELECT s FROM Server s WHERE s.online = true");
+
+		Set<Long> cachedServers = new TreeSet<>();
+		for (Server temp : (List<Server>) query.getResultList()) {
+			servers.add(temp);
+
+			// Add it to the cache
+			Long id = temp.getKey().getId();
+			cache.put(id, temp);
+			cachedServers.add(id);
+		}
+
+		// Put server id list into the cache
+		cache.put("cachedServers", cachedServers);
+
+		refreshStatics(servers);
+
+		return servers;
+	}
 
 	/**
 	 * Gets a server by Key
@@ -100,50 +167,6 @@ public class ServersService {
 	}
 
 	/**
-	 * Get Online servers (it has a protective cache)
-	 * 
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	@Cacheable(value = cacheName, key = "#root.methodName")
-	public List<Server> getOnlineServers() {
-		List<Server> servers = new ArrayList<>();
-		Cache cache = cacheManager.getCache(cacheName);
-
-		// First, try the cache
-		try {
-			Set<Long> cachedServers = (Set<Long>) cache.get("cachedServers")
-					.get();
-
-			for (Long id : cachedServers) {
-				servers.add(getServerFromCache(id));
-			}
-
-			return servers;
-		} catch (Exception e) {
-			// Do nothing
-		}
-
-		Query query = entityManager
-				.createQuery("SELECT s FROM Server s WHERE s.online = true");
-
-		Set<Long> cachedServers = new TreeSet<>();
-		for (Server temp : (List<Server>) query.getResultList()) {
-			servers.add(temp);
-
-			// Add it to the cache
-			Long id = temp.getKey().getId();
-			cache.put(id, temp);
-			cachedServers.add(id);
-		}
-
-		// Put server id list into the cache
-		cache.put("cachedServers", cachedServers);
-
-		return servers;
-	}
-
-	/**
 	 * Adds a server to the cache or if its already there, it will overwrite it
 	 * 
 	 * @param server
@@ -167,77 +190,6 @@ public class ServersService {
 		}
 
 		cache.evict("getOnlineServers");
-	}
-
-	@SuppressWarnings("unchecked")
-	private void removeServerFromCache(Server server) {
-		Cache cache = cacheManager.getCache(cacheName);
-
-		Set<Long> cachedServers = null;
-		ValueWrapper object = cache.get("cachedServers");
-		if (object != null)
-			cachedServers = (Set<Long>) object.get();
-
-		cache.evict(server.getKey().getId());
-
-		// If it isn't in the list, then don't upload the list again
-		if (cachedServers != null
-				&& cachedServers.contains(server.getKey().getId())) {
-			cachedServers.remove(server.getKey().getId());
-			cache.put("cachedServers", cachedServers);
-		}
-
-		cache.evict("getOnlineServers");
-	}
-
-	// public void test() {
-	// EntityManager em = entityManagerFactory.createEntityManager();
-	// em.getTransaction().begin();
-	//
-	// Server server = new Server();
-	// server.setCountry("de");
-	// server.setGamemode(ServerGamemodes.AOCKOTH);
-	// server.setMap(ServerMaps.DARKFOREST);
-	// server.setIp("124.123.235.165");
-	// server.setPort(7777);
-	// server.setOnline(true);
-	// server.setSlot(64);
-	// server.setPlayers(21);
-	// server.setName("[AS] Asdblah lorem ipsum BA/HG/W");
-	// server.setTunngle(false);
-	// server.setLastonline(new Date());
-	// server.setLastupdate(new Date());
-	// em.persist(server);
-	// em.getTransaction().commit();
-	// em.close();
-	//
-	// putServerInCache(server);
-	// }
-
-	@Transactional
-	public Server register(RegisterServerData data, String country) {
-
-		// If its already registered, then return the existing
-		// try {
-		// Server temp = getServer(data.getIp(), data.getPort());
-		// removeServerFromCache(temp);
-		// entityManager.remove(temp);
-		// } catch (Exception e) {
-		// throw e;
-		// }
-
-		Server server = data.createServer();
-		server.setLastupdate(Calendar.getInstance().getTimeInMillis());
-		server.setOnline(false);
-		server.setCountry(country);
-
-		// TODO test IP if not tunngle
-		server.setIp(data.getIp());
-
-		// Persist the new server
-		entityManager.persist(server);
-
-		return server;
 	}
 
 	@Transactional
@@ -267,6 +219,72 @@ public class ServersService {
 		return server;
 	}
 
+	// public void test() {
+	// EntityManager em = entityManagerFactory.createEntityManager();
+	// em.getTransaction().begin();
+	//
+	// Server server = new Server();
+	// server.setCountry("de");
+	// server.setGamemode(ServerGamemodes.AOCKOTH);
+	// server.setMap(ServerMaps.DARKFOREST);
+	// server.setIp("124.123.235.165");
+	// server.setPort(7777);
+	// server.setOnline(true);
+	// server.setSlot(64);
+	// server.setPlayers(21);
+	// server.setName("[AS] Asdblah lorem ipsum BA/HG/W");
+	// server.setTunngle(false);
+	// server.setLastonline(new Date());
+	// server.setLastupdate(new Date());
+	// em.persist(server);
+	// em.getTransaction().commit();
+	// em.close();
+	//
+	// putServerInCache(server);
+	// }
+
+	/**
+	 * Refreshes the global statics
+	 * 
+	 * @param servers
+	 */
+	private void refreshStatics(List<Server> servers) {
+		context.getServletContext().setAttribute("global_serverCount",
+				servers.size());
+
+		int players = 0;
+		for (Server server : servers)
+			players += server.getPlayers();
+
+		context.getServletContext().setAttribute("global_playerCount", players);
+	}
+
+	@Transactional
+	public Server register(RegisterServerData data, String country) {
+
+		// If its already registered, then return the existing
+		// try {
+		// Server temp = getServer(data.getIp(), data.getPort());
+		// removeServerFromCache(temp);
+		// entityManager.remove(temp);
+		// } catch (Exception e) {
+		// throw e;
+		// }
+
+		Server server = data.createServer();
+		server.setLastupdate(Calendar.getInstance().getTimeInMillis());
+		server.setOnline(false);
+		server.setCountry(country);
+
+		// TODO test IP if not tunngle
+		server.setIp(data.getIp());
+
+		// Persist the new server
+		entityManager.persist(server);
+
+		return server;
+	}
+
 	@Transactional
 	public void remove(RemoveServerData data) throws Exception {
 		// Get the server
@@ -278,18 +296,24 @@ public class ServersService {
 		entityManager.remove(server);
 	}
 
-	@Transactional
-	public void deleteStaleServers() {
-		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.MINUTE, -16);
+	@SuppressWarnings("unchecked")
+	private void removeServerFromCache(Server server) {
+		Cache cache = cacheManager.getCache(cacheName);
 
-		int deleted = entityManager
-				.createQuery("DELETE FROM Server s WHERE s.lastupdate < :date")
-				.setParameter("date", cal.getTimeInMillis()).executeUpdate();
+		Set<Long> cachedServers = null;
+		ValueWrapper object = cache.get("cachedServers");
+		if (object != null)
+			cachedServers = (Set<Long>) object.get();
 
-		if (deleted > 0) {
-			cacheManager.getCache(cacheName).evict("cachedServers");
-			cacheManager.getCache(cacheName).evict("getOnlineServers");
+		cache.evict(server.getKey().getId());
+
+		// If it isn't in the list, then don't upload the list again
+		if (cachedServers != null
+				&& cachedServers.contains(server.getKey().getId())) {
+			cachedServers.remove(server.getKey().getId());
+			cache.put("cachedServers", cachedServers);
 		}
+
+		cache.evict("getOnlineServers");
 	}
 }

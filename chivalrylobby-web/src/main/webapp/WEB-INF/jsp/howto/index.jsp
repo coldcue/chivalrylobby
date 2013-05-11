@@ -13,7 +13,7 @@
 		</div>
 		<div class="content-box">
 			<a href="/howto/connect">
-				<h1>HOW TO CONNECT</h1>
+				<h1>HOW TO CONNECT TO A SERVER</h1>
 			</a>
 		</div>
 		<div class="content-box">

@@ -4,7 +4,7 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<packaging>war</packaging>
-	<version>1-0-beta</version>
+	<version>1-0-1-beta</version>
 
 	<groupId>com.chivalrylobby.web</groupId>
 	<artifactId>chivalrylobby-web</artifactId>
@@ -181,6 +181,7 @@
 				<artifactId>appengine-maven-plugin</artifactId>
 				<version>${appengine.target.version}</version>
 				<configuration>
+					<version>${appengine.app.version}</version>
 					<enableJarSplitting>true</enableJarSplitting>
 					<jvmFlags>
 						<jvmFlag>-Xdebug</jvmFlag>

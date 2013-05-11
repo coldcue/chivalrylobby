@@ -34,6 +34,10 @@
 	<div class="container_12">
 		<div class="grid_12">
 			<div id="ID-menu">
+				<span class="statics">THERE ARE <span class="lighter">${global_serverCount}</span>
+					SERVERS WITH <span class="lighter">${global_playerCount}</span>
+					PLAYERS
+				</span>
 				<ul>
 					<li><a href="/">SERVER BROWSER</a></li>
 					<li><a href="/howto/">HOW-TO</a></li>
