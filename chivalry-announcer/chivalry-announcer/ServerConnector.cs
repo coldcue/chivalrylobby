@@ -55,7 +55,7 @@ namespace chivalry_announcer
         public ServerData getServerData()
         {
             process.Refresh();
-            Match match = Regex.Match(process.MainWindowTitle, ".*: (.+) \\(([0-9]+) players\\)");
+            Match match = Regex.Match(process.MainWindowTitle, ".*: (.+) \\(([0-9]+) .*\\)");
 
             if (!match.Success) throw new Exception("Server is in invalid status");
 
@@ -128,7 +128,7 @@ namespace chivalry_announcer
                 {
                     try
                     {
-                        Match match = Regex.Match(theprocess.MainWindowTitle, ".*: .+ \\([0-9]+ players\\)");
+                        Match match = Regex.Match(theprocess.MainWindowTitle, ".*: .+ \\([0-9]+ .*\\)");
                         if (match.Success) return theprocess;
 
                     }
