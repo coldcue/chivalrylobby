@@ -1,9 +1,11 @@
 package com.chivalrylobby.web.entity.enums;
 
 public enum ServerGamemodes {
-	ND("", ""), AOCTO("Team Objective", "TO"), AOCTD("Team Deathmatch", "TD"), AOCFFA(
+	AOCCTF("Capture the Flag", "CTF"), AOCDUEL("Duel", "DUEL"), AOCFFA(
 			"Free-for-All", "FFA"), AOCKOTH("King of the hill", "KOTH"), AOCLTS(
-			"Last Team Standing", "LTS");
+			"Last Team Standing", "LTS"), AOCTD("Team Deathmatch", "TD"), AOCTO(
+			"Team Objective", "TO"), ND("No data", "ND"), UT(
+			"Unreal Tournament", "UT");
 
 	private String fullname;
 	private String name;
