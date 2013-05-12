@@ -4,6 +4,14 @@
 <%@include file="/WEB-INF/jsp/module/head.jsp"%>
 <%@include file="/WEB-INF/jsp/module/header.jsp"%>
 
+<script type="text/javascript">
+<!--
+	function showIp(ip) {
+		prompt('Copy the address! CTRL-C', ip);
+	}
+//-->
+</script>
+
 <div class="container_12">
 	<div class="grid_8">
 		<div class="content-box">
@@ -16,7 +24,7 @@
 						<ul>
 							<c:forEach items="${serverList}" var="server">
 								<li><a
-									href="javascript:prompt('Copy the address! CTRL-C','${server.ip}:${server.port}')">
+									href="javascript:showIp('${server.ip}:${server.port}');">
 										<table>
 											<tr>
 												<td class="map"><img
