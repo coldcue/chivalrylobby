@@ -7,7 +7,7 @@
 <div class="container_12">
 	<div class="grid_8">
 		<div class="content-box">
-			<a href="/howto/install">
+			<a href="http://bit.ly/13V4UQ9">
 				<h1>HOW TO INSTALL THE GAME</h1>
 			</a>
 		</div>
