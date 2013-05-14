@@ -1,5 +1,7 @@
 package com.chivalrylobby.web.clapi;
 
+import java.util.logging.Logger;
+
 import com.chivalrylobby.web.clapi.security.SecurityImpl;
 import com.chivalrylobby.web.entity.enums.ServerGamemodes;
 import com.chivalrylobby.web.entity.enums.ServerMaps;
@@ -11,6 +13,8 @@ import com.chivalrylobby.web.entity.enums.ServerMaps;
  * 
  */
 public class RefreshServerData extends SecurityImpl {
+	private static final Logger log = Logger.getLogger(RefreshServerData.class
+			.getName());
 	private long id;
 	private String map;
 	private int players;
@@ -45,12 +49,14 @@ public class RefreshServerData extends SecurityImpl {
 		try {
 			gamemode = ServerGamemodes.valueOf(temp[0].toUpperCase());
 		} catch (Exception e) {
+			log.severe("Gamemode not found! :" + map);
 			gamemode = ServerGamemodes.ND;
 		}
 
 		try {
 			maps = ServerMaps.valueOf(temp[1].toUpperCase());
 		} catch (Exception e) {
+			log.severe("Map not found! :" + map);
 			maps = ServerMaps.ND;
 		}
 	}
