@@ -8,8 +8,8 @@ public enum ServerMaps {
 			"Hillside"), HILLSIDEPYRE("Hillside Pyre"), MINES("Mines"), MOOR(
 			"Moor"), ND("No data"), RUINS("Ruins"), SHAFT("Shaft"), SHIPYARD(
 			"Shipyard"), STONESHILL("Stoneshill"), STONESHILLVILLAGE(
-			"Stoneshill Village"), THRONEROOMXL("Throne Room XL"), TOWER(
-			"Tower");
+			"Stoneshill Village"), THRONEROOM("Throne Room"), THRONEROOMXL(
+			"Throne Room XL"), TOWER("Tower");
 	private String fullname;
 
 	private ServerMaps(String fullname) {
