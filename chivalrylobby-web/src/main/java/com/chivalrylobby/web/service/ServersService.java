@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -29,6 +30,9 @@ import com.google.appengine.api.datastore.KeyFactory;
 
 @Component("serversService")
 public class ServersService {
+	private final Logger log = Logger.getLogger(ServersService.class
+			.getSimpleName());
+
 	@Autowired
 	private CacheManager cacheManager;
 
@@ -46,7 +50,7 @@ public class ServersService {
 	@Transactional
 	public void deleteStaleServers() {
 		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.MINUTE, -16);
+		cal.add(Calendar.MINUTE, -6);
 
 		int deleted = entityManager
 				.createQuery("DELETE FROM Server s WHERE s.lastupdate < :date")
@@ -270,6 +274,7 @@ public class ServersService {
 		// } catch (Exception e) {
 		// throw e;
 		// }
+		log.info("Server registering: " + data);
 
 		Server server = data.createServer();
 		server.setLastupdate(Calendar.getInstance().getTimeInMillis());

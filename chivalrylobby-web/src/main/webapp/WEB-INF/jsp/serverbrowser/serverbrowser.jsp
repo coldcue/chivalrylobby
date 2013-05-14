@@ -37,7 +37,7 @@
 															alt="${server.country}" width="16" height="11">
 														${server.ip}:${server.port} - ${server.map.fullname} -
 														${server.gamemode.fullname}
-														<c:if test="server.tunngle"> - Tunngle</c:if>
+														<c:if test="${server.tunngle}"> - Tunngle</c:if>
 													</div>
 												</td>
 												<td class="players">${server.players} / ${server.slot}</td>

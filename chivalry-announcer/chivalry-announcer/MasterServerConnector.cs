@@ -102,7 +102,7 @@ namespace chivalry_announcer
             if (!sc.isRunning()) throw new Exception("Server isn't running!");
             ServerData sd = sc.getServerData();
 
-            if (!ServerConnector.hasChanges(sd, sc.lastData) && sc.lastData.time.AddMinutes(15) > sd.time) return null;
+            if (!ServerConnector.hasChanges(sd, sc.lastData) && sc.lastData.time.AddMinutes(5) > sd.time) return null;
             sc.lastData = sd;
 
             RefreshServerData data = new RefreshServerData(sc.id, sd.map, sd.players);

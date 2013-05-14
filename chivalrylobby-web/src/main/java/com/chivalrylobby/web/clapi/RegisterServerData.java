@@ -70,4 +70,10 @@ public class RegisterServerData extends SecurityImpl {
 	public void setTunngle(boolean tunngle) {
 		this.tunngle = tunngle;
 	}
+
+	@Override
+	public String toString() {
+		return "ip=" + ip + ":" + port + " tunngle=" + tunngle + " slot="
+				+ slot + " name=" + name;
+	}
 }
