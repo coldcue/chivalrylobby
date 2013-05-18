@@ -25,7 +25,7 @@ public class ServerBrowserController {
 	WebApplicationContext context;
 
 	@RequestMapping("/")
-	public ModelAndView index() {
+	public ModelAndView index() throws Exception {
 		ModelAndView mav = new ModelAndView("serverbrowser/serverbrowser");
 
 		List<Server> servers = serversService.getOnlineServers();

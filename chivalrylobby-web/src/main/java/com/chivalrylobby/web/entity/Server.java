@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 
 import com.chivalrylobby.web.entity.enums.ServerGamemodes;
 import com.chivalrylobby.web.entity.enums.ServerMaps;
@@ -23,8 +24,6 @@ public class Server implements Serializable {
 	@Column(length = 64)
 	private String name;
 
-	private boolean online;
-
 	@Column(length = 16)
 	private String ip;
 
@@ -34,15 +33,19 @@ public class Server implements Serializable {
 	private String country;
 
 	private int slot;
-
-	private int players;
-
+	
 	private boolean tunngle;
 
+	@Transient
+	private int players;
+
+	@Transient
 	private long lastupdate;
 
+	@Transient
 	private ServerMaps map;
 
+	@Transient
 	private ServerGamemodes gamemode;
 
 	public Server() {
@@ -62,14 +65,6 @@ public class Server implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public boolean isOnline() {
-		return online;
-	}
-
-	public void setOnline(boolean online) {
-		this.online = online;
 	}
 
 	public String getIp() {
