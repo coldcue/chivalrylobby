@@ -4,7 +4,7 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<packaging>war</packaging>
-	<version>1-0-1-beta</version>
+	<version>1-0-2-beta</version>
 
 	<groupId>com.chivalrylobby.web</groupId>
 	<artifactId>chivalrylobby-web</artifactId>

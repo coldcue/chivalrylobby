@@ -7,38 +7,46 @@ import java.util.TreeSet;
 import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
+import org.springframework.cache.Cache.ValueWrapper;
 import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Component;
 
 import com.chivalrylobby.web.entity.Server;
 
 @Component("serversCacheService")
-public class ServersCacheManager {
-	private final Logger log = Logger.getLogger(ServersCacheManager.class
-			.getSimpleName());
-
-	private final String cacheName = "servers";
-	private final String listCacheName = "serverList";
-
+public class ServersCacheService {
 	@Autowired
 	private CacheManager cacheManager;
 
-	@Autowired
+	@PersistenceContext
 	private EntityManager entityManager;
 
+	private final String cacheName = "servers";
+
+	private final String listCacheName = "serverList";
+
+	private final Logger log = Logger.getLogger(ServersCacheService.class
+			.getSimpleName());
+
 	/**
-	 * Puts the server in the memcache
+	 * Adds a server id to the cached servers list
 	 * 
-	 * @param server
-	 * @throws Exception
+	 * @param id
 	 */
-	public void put(Server server) throws Exception {
-		cacheManager.getCache(cacheName).put(server.getKey().getId(), server);
-		addToList(server.getKey().getId());
+	private void addToList(long id) throws Exception {
+		Cache cache = cacheManager.getCache(cacheName);
+
+		@SuppressWarnings("unchecked")
+		Set<Long> ids = (Set<Long>) cache.get(listCacheName).get();
+
+		ids.add(id);
+
+		cache.put(listCacheName, ids);
 	}
 
 	/**
@@ -75,19 +83,28 @@ public class ServersCacheManager {
 	}
 
 	/**
-	 * Adds a server id to the cached servers list
+	 * Gets the list of server ID's
 	 * 
-	 * @param id
+	 * @return
 	 */
-	private void addToList(long id) throws Exception {
+	@SuppressWarnings("unchecked")
+	private Set<Long> getList() throws Exception {
 		Cache cache = cacheManager.getCache(cacheName);
+		ValueWrapper vw = cache.get(listCacheName);
+		if (vw == null)
+			return new TreeSet<Long>();
+		return (Set<Long>) vw.get();
+	}
 
-		@SuppressWarnings("unchecked")
-		Set<Long> ids = (Set<Long>) cache.get(listCacheName).get();
-
-		ids.add(id);
-
-		cache.put(listCacheName, ids);
+	/**
+	 * Puts the server in the memcache
+	 * 
+	 * @param server
+	 * @throws Exception
+	 */
+	public void put(Server server) throws Exception {
+		cacheManager.getCache(cacheName).put(server.getKey().getId(), server);
+		addToList(server.getKey().getId());
 	}
 
 	/**
@@ -104,17 +121,6 @@ public class ServersCacheManager {
 		ids.remove(id);
 
 		cache.put(listCacheName, ids);
-	}
-
-	/**
-	 * Gets the list of server ID's
-	 * 
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	private Set<Long> getList() throws Exception {
-		Cache cache = cacheManager.getCache(cacheName);
-		return (Set<Long>) cache.get(listCacheName).get();
 	}
 
 	/**

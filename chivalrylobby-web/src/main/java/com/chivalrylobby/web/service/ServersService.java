@@ -38,7 +38,7 @@ public class ServersService {
 			.getSimpleName());
 
 	@Autowired
-	ServersCacheManager serversCacheManager;
+	ServersCacheService serversCacheManager;
 
 	/**
 	 * Delete servers that has exceeded the maximum refresh time
