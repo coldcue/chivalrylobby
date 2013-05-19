@@ -4,7 +4,7 @@ public enum ServerMaps {
 	ARENA3("Arena"), ARGONSWALL("Argons Wall"), BATTLEGROUNDS("Battlegrounds"), BRIDGE(
 			"Bridge"), CISTERN("Cistern"), CITADEL("Citadel"), COURTYARD(
 			"Courtyard"), DARKFOREST("Dark Forest"), DININGHALL("Dining hall"), FRIGID(
-			"Frigid"), FROSTPEAK("Frost Peak"), HADRIANSWALL("Hadrians Wall"), HILLSIDE(
+			"Frigid"), FROSTPEAK("Frost Peak"), HILLSIDE(
 			"Hillside"), HILLSIDEPYRE("Hillside Pyre"), MINES("Mines"), MOOR(
 			"Moor"), ND("No data"), RUINS("Ruins"), SHAFT("Shaft"), SHIPYARD(
 			"Shipyard"), STONESHILL("Stoneshill"), STONESHILLVILLAGE(
