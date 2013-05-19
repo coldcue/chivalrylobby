@@ -10,7 +10,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
@@ -91,7 +91,7 @@ public class ServersService {
 	 * @return
 	 * @throws Exception
 	 */
-	@CachePut(value = cacheName, key = "#id")
+	@Cacheable(value = cacheName, key = "#id")
 	public Server getServer(long id) throws Exception {
 		try {
 			Server ret = entityManager.find(Server.class,

@@ -38,11 +38,16 @@ public class ServersCacheService {
 	 * 
 	 * @param id
 	 */
+	@SuppressWarnings("unchecked")
 	private void addToList(long id) throws Exception {
 		Cache cache = cacheManager.getCache(cacheName);
 
-		@SuppressWarnings("unchecked")
-		Set<Long> ids = (Set<Long>) cache.get(listCacheName).get();
+		Set<Long> ids = null;
+		try {
+			ids = (Set<Long>) cache.get(listCacheName).get();
+		} catch (Exception e) {
+			ids = new TreeSet<>();
+		}
 
 		ids.add(id);
 
@@ -75,6 +80,9 @@ public class ServersCacheService {
 		Set<Long> ids = getList();
 		List<Server> servers = new ArrayList<>();
 
+		if (ids == null)
+			synchronize();
+
 		for (long id : ids) {
 			servers.add(get(id));
 		}
@@ -88,11 +96,11 @@ public class ServersCacheService {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	private Set<Long> getList() throws Exception {
+	private Set<Long> getList() {
 		Cache cache = cacheManager.getCache(cacheName);
 		ValueWrapper vw = cache.get(listCacheName);
 		if (vw == null)
-			return new TreeSet<Long>();
+			return null;
 		return (Set<Long>) vw.get();
 	}
 
@@ -129,39 +137,28 @@ public class ServersCacheService {
 	public void synchronize() {
 		Cache cache = cacheManager.getCache(cacheName);
 
-		Set<Long> inDbIds = new TreeSet<>();
-		Set<Long> cachedIds;
-		try {
-			cachedIds = getList();
-		} catch (Exception e) {
-			cachedIds = new TreeSet<>();
+		Set<Long> cachedIds = getList();
+		if (cachedIds == null) {
 			log.info("Cache was lost");
+			cache.put(listCacheName, new TreeSet<>());
+		} else {
+			Set<Long> inDbIds = new TreeSet<>();
+			Query query = entityManager.createQuery("SELECT s FROM Server s");
+			@SuppressWarnings("unchecked")
+			List<Server> servers = (List<Server>) query.getResultList();
+
+			for (Server server : servers)
+				inDbIds.add(server.getKey().getId());
+
+			// Remove servers that are not in the database
+			Set<Long> toRemove = cachedIds;
+			toRemove.removeAll(inDbIds);
+
+			for (Long id : toRemove)
+				cacheManager.getCache(cacheName).evict(id);
+
+			// Put server id list into the cache
+			cache.put(listCacheName, cachedIds);
 		}
-
-		Query query = entityManager.createQuery("SELECT s FROM Server s");
-		@SuppressWarnings("unchecked")
-		List<Server> servers = (List<Server>) query.getResultList();
-
-		for (Server server : servers) {
-			long id = server.getKey().getId();
-
-			inDbIds.add(id);
-
-			if (!cachedIds.contains(id)) {
-				cachedIds.add(id);
-				cache.put(id, server);
-			}
-		}
-
-		// Remove servers that are not in the database
-		Set<Long> toRemove = cachedIds;
-		toRemove.removeAll(inDbIds);
-
-		for (Long id : toRemove) {
-			cache.evict(id);
-		}
-
-		// Put server id list into the cache
-		cache.put(listCacheName, cachedIds);
 	}
 }
