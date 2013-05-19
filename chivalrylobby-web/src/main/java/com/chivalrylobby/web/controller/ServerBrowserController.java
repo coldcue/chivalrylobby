@@ -1,5 +1,6 @@
 package com.chivalrylobby.web.controller;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -29,10 +30,26 @@ public class ServerBrowserController {
 		ModelAndView mav = new ModelAndView("serverbrowser/serverbrowser");
 
 		List<Server> servers = serversService.getOnlineServers();
+
+		// Sort by players
+		Collections.sort(servers, Server.compareByPlayers);
+		Collections.reverse(servers);
+
 		mav.addObject(servers);
 		mav.addObject("serversCount", servers.size());
 
 		return mav;
+	}
+
+	/**
+	 * There are some external links which directs to this page, now its
+	 * redirecting to the main page
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/all")
+	public String all() {
+		return "redirect:/";
 	}
 
 	// @RequestMapping("/test")

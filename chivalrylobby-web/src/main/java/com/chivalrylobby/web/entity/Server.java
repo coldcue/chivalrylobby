@@ -1,6 +1,7 @@
 package com.chivalrylobby.web.entity;
 
 import java.io.Serializable;
+import java.util.Comparator;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,6 +17,13 @@ import com.google.appengine.api.datastore.Key;
 @Entity
 public class Server implements Serializable {
 	private static final long serialVersionUID = 4007569952052596829L;
+
+	public static final Comparator<Server> compareByPlayers = new Comparator<Server>() {
+		@Override
+		public int compare(Server o1, Server o2) {
+			return Integer.compare(o1.players, o2.players);
+		}
+	};
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +41,7 @@ public class Server implements Serializable {
 	private String country;
 
 	private int slot;
-	
+
 	private boolean tunngle;
 
 	@Transient
